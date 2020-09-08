@@ -4,8 +4,10 @@ import re
 import sys
 from marshmallow import Schema, fields
 
+Token.set_extension('alpheios_segment_break_before',default=False)
 Token.set_extension('alpheios_line_break_before',default=False)
-Token.set_extension('alpheios_tbref',default=None)
+Token.set_extension('alpheios_tbword',default=None)
+Token.set_extension('alpheios_tbsent',default=None)
 
 class Processor():
     """ Spacy Wrapper Class """
@@ -30,8 +32,8 @@ class Processor():
 
 
 
-    def _new_segment(self, index=0, tbSeg=False):
-        return {'index':index, 'tokens':[], 'tb_sent': index if tbSeg else ''}
+    def _new_segment(self, index=0, tbSeg=''):
+        return {'index':index, 'tokens':[], 'tb_sent': tbSeg}
 
     def tokenize(self, text=None, lang=None, segon=None, sentencize=False, segstart=0, tbseg=False):
         nlp = self._load_model(lang)
@@ -42,29 +44,57 @@ class Processor():
         if (sentencize):
             self._add_sentencizer(nlp=nlp)
 
-        match_ref = re.compile(r'^TBREF_.+$')
+        match_tbword = re.compile(r'^TBWORD_.+$')
+        match_tbsent = re.compile(r'^TBSENT_.+$')
+        match_lines = re.compile(r'^\n+$')
 
         def set_custom_boundaries(doc):
             for token in doc[:-1]:
-                if token.text == '\n':
+                if match_lines.match(token.text):
                     doc[token.i+1]._.set('alpheios_line_break_before',True)
-                if match_ref.match(token.text):
-                    doc[token.i+1]._.set('alpheios_tbref',token.text)
+                    if token.text == '\n\n':
+                        doc[token.i+1]._.set('alpheios_segment_break_before',True)
+                if match_tbword.match(token.text):
+                    doc[token.i+1]._.set('alpheios_tbword',token.text)
+                    doc[token.i+1]._.set('alpheios_line_break_before',token._.alpheios_line_break_before)
+                    doc[token.i+1]._.set('alpheios_segment_break_before',token._.alpheios_segment_break_before)
+                elif match_tbsent.match(token.text):
+                    doc[token.i+1]._.set('alpheios_tbsent',token.text)
+                    doc[token.i+1]._.set('alpheios_line_break_before',token._.alpheios_line_break_before)
+                    doc[token.i+1]._.set('alpheios_segment_break_before',token._.alpheios_segment_break_before)
+                    pass
             return doc
         nlp.add_pipe(set_custom_boundaries)
 
-        doc = nlp(text, disable=['parser','tagger', 'ner'])
-        num = len(doc)
+
         segNum = segstart
-        tbFromSeg = tbseg
-        currentSegment = self._new_segment(index=segNum,tbSeg=tbFromSeg)
+
+        match_seg = re.compile(r'^(TBSENT_[\S]+)')
+        matched_seg = match_seg.match(text)
+        if (matched_seg):
+            tbStart = matched_seg.group(0)
+            text = match_seg.sub('',text,1)
+        elif tbseg:
+            tbStart = segNum
+        else:
+            tbStart = ''
+        doc = nlp(text, disable=['parser','tagger', 'ner'])
+        currentSegment = self._new_segment(index=segNum,tbSeg=tbStart)
         segments = [currentSegment]
         tokenIndex = 0
         for token in doc:
-            if (not token.is_space) and not (match_ref.match(token.text)):
-                if (segon == 'newline' and token._.alpheios_line_break_before):
+            if (
+                not token.is_space
+                and not match_tbword.match(token.text)
+                and not match_tbsent.match(token.text)
+            ):
+                if (
+                    (segon == 'singleline' and token._.alpheios_line_break_before)
+                    or (segon == 'doubleline' and token._.alpheios_segment_break_before)
+                ):
                     segNum = segNum + 1
-                    currentSegment = self._new_segment(index=segNum,tbSeg=tbFromSeg)
+                    tbSeg = segNum if tbseg else token._.alpheios_tbsent
+                    currentSegment = self._new_segment(index=segNum,tbSeg=tbSeg)
                     segments.append(currentSegment)
                     tokenIndex = 0
                 returnTok = {
@@ -74,7 +104,7 @@ class Processor():
                   'is_punct': token.is_punct,
                   'start_sent': token.is_sent_start if sentencize and token.is_sent_start is not None else False,
                   'lb_before': token._.alpheios_line_break_before,
-                  'tb_word': token._.alpheios_tbref if token._.alpheios_tbref is not None else ''
+                  'tb_word': token._.alpheios_tbword if token._.alpheios_tbword is not None else ''
                 }
                 currentSegment['tokens'].append(returnTok)
                 tokenIndex = tokenIndex + 1

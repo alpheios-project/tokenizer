@@ -14,9 +14,8 @@ class TokenizeTeiRequestSchema(Schema):
     segstart = fields.Integer(required=False, default=1, missing=1)
 
 class TokenizeTextRequestSchema(Schema):
-    segments = fields.Str(required=False,default="newline",missing="newline")
+    segments = fields.Str(required=False,default="singleline",missing="singleline")
     sentencize = fields.Boolean(required=False, default=False, missing=False)
-    linebreaks = fields.Boolean(required=False, default=True, missing=True)
     lang = fields.Str(required=True)
     tbseg = fields.Boolean(required=False, default=False, missing=False)
     segstart = fields.Integer(required=False, default=1, missing=1)
