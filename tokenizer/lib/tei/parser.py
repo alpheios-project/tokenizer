@@ -10,12 +10,21 @@ class Parser():
         :type config: dict
         """
         resource_package = __name__
-        xslt_path = '/' .join(('xslt','plaintext.xsl'))
-        xslt = pkg_resources.resource_string(resource_package,xslt_path)
-        self.xslt_transformer = etree.XSLT(etree.XML(xslt))
 
-    def parse(self, tei=None):
-        text = str(self.xslt_transformer(etree.fromstring(tei)))
+        text_xslt_path = '/' .join(('xslt','plaintext.xsl'))
+        text_xslt = pkg_resources.resource_string(resource_package,text_xslt_path)
+        self.text_xslt_transformer = etree.XSLT(etree.XML(text_xslt))
+
+    def parse_meta(self, tei):
+        # TODO we should try to parse the metadata from the TEI header
+        meta = {
+            'title': 'dummy title',
+            'author': 'dummy author'
+        }
+        return meta
+
+    def parse_text(self, tei):
+        text = str(self.text_xslt_transformer(etree.fromstring(tei)))
         p = re.compile(r'\s+',re.DOTALL)
         text = p.sub(' ',text)
         p = re.compile(r'__ALPHEIOS_LINE_BREAK__',re.DOTALL)

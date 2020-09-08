@@ -1,0 +1,60 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:py="http://codespeak.net/lxml/objectify/pytype"
+  py:pytype="TREE">
+  <text>
+    <body n="urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1">
+      <div type="edition" xml:lang="lat" n="urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1">
+        <div type="textpart" subtype="book" n="1">
+          <l n="1"><w ana="1-1">In</w><w ana="1-2">nova</w><w ana="1-3">fert</w><w ana="1-4"
+              >animus</w><w ana="1-5">mutatas</w><w ana="1-6">dicere</w><w ana="1-7">formas</w></l>
+          <l n="2"><w ana="1-8">corpora</w>; <w ana="2-1">di</w>, <w ana="2-3">coeptis</w> (<w
+              ana="2-5">nam</w>
+            <w ana="2-6">vos</w>
+            <w ana="2-7">mutastis</w>
+            <w ana="2-8">et</w>
+            <w ana="2-9">illas</w>)</l>
+          <l n="3"><w ana="2-11">adspirate</w><w ana="2-12">meis</w><w ana="2-13 2-14"
+              >primaque</w><w ana="2-15">ab</w><w ana="2-16">origine</w><w ana="2-17">mundi</w></l>
+          <l n="4"><w ana="2-18">ad</w><w ana="2-19">mea</w><w ana="2-20">perpetuum</w><w ana="2-21"
+              >deducite</w><w ana="2-22">tempora</w><w ana="2-23">carmen</w>.</l>
+          <milestone n="5" unit="card"/>
+          <milestone ed="Magnus" n="Mundi origo." unit="tale"/>
+          <milestone ed="P" unit="para"/>
+          <l n="5"><w ana="3-1">Ante</w><w ana="3-2">mare</w><w ana="3-3">et</w><w ana="3-4"
+              >terras</w><w ana="3-5">et</w><w ana="3-6">quod</w><w ana="3-7">tegit</w><w ana="3-8"
+              >omnia</w><w ana="3-9">caelum</w></l>
+          <l n="6"><w ana="3-10">unus</w><w ana="3-11">erat</w><w ana="3-12">toto</w><w ana="3-13"
+              >naturae</w><w ana="3-14">vultus</w><w ana="3-15">in</w><w ana="3-16">orbe</w>,</l>
+          <l n="7"><w ana="3-18">quem</w><w ana="3-19">dixere</w><w ana="3-20">chaos</w>: <w
+              ana="4-1">rudis</w><w ana="4-2 4-3">indigestaque</w><w ana="4-4">moles</w></l>
+          <l n="8"><w ana="4-5 4-6">nec</w><w ana="4-7">quicquam</w><w ana="4-8">nisi</w><w
+              ana="4-9">pondus</w><w ana="4-10">iners</w><w ana="4-11 4-12">congestaque</w><w
+              ana="4-13">eodem</w></l>
+          <l n="9"><w ana="4-14">non</w><w ana="4-15">bene</w><w ana="4-16">iunctarum</w><w
+              ana="4-17">discordia</w><w ana="4-18">semina</w><w ana="4-19">rerum</w>.</l>
+          <l n="10">nullus adhuc mundo praebebat lumina Titan,</l>
+          <l n="11">nec nova crescendo reparabat cornua Phoebe,</l>
+          <l n="12">nec circumfuso pendebat in aere tellus</l>
+          <l n="13">ponderibus librata suis, nec bracchia longo</l>
+          <l n="14">margine terrarum porrexerat Amphitrite;</l>
+          <l n="15">utque aer, tellus illic et pontus et aether.</l>
+          <l n="16">Sic erat instabilis tellus, innabilis unda,</l>
+          <l n="17">lucis egens aer: nulli sua forma manebat,</l>
+          <l n="18">obstabatque aliis aliud, quia corpore in uno</l>
+          <l n="19">frigida pugnabant calidis, umentia siccis,</l>
+          <l n="20">mollia cum duris, sine pondere habentia pondus.</l>
+          <milestone ed="P" unit="para"/>
+          <l n="21">Hanc deus et melior litem natura diremit.</l>
+          <l n="22">Nam caelo terras et terris abscidit undas,</l>
+          <l n="23">et liquidum spisso secrevit ab aere caelum.</l>
+          <l n="24">Quae postquam evolvit caecoque exemit acervo,</l>
+          <l n="25">dissociata locis concordi pace ligavit.</l>
+          <l n="26">Ignea convexi vis et sine pondere caeli</l>
+          <l n="27">emicuit summaque locum sibi fecit in arce:</l>
+          <l n="28">proximus est aer illi levitate locoque:</l>
+          <l n="29">densior his tellus, elementaque grandia traxit</l>
+          <l n="30">et pressa est gravitate sua: circumfluus umor</l>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

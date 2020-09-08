@@ -3,6 +3,8 @@ from flask import Flask
 import click
 import time
 from tokenizer.tokenizer import init_app, get_app
+from tokenizer.lib.tei.parser import Parser
+from tokenizer.lib.spacy.processor import Processor
 
 # Input Profiles
 # TEI, Line Breaks preserved  => Single Segment
@@ -37,7 +39,7 @@ from tokenizer.tokenizer import init_app, get_app
 
 tei = '<TEI xmlns="http://www.tei-c.org/ns/1.0"><teiHeader></teiHeader><text><body><l>θεοὺς μὲν αἰτῶ τῶνδ᾽ ἀπαλλαγὴν πόνων φρουρᾶς ἐτείας μῆκος,</l> <l>ἣν κοιμώμενος στέγαις Ἀτρειδῶν ἄγκαθεν, κυνὸς δίκην,</l><l>ἄστρων κάτοιδα νυκτέρων ὁμήγυριν, καὶ τοὺς φέροντας χεῖμα καὶ θέρος βροτοῖς λαμπροὺς δυνάστας, ἐμπρέποντας αἰθέρι [ἀστέρας, ὅταν φθίνωσιν, ἀντολάς τε τῶν].  καὶ νῦν φυλάσσω λαμπάδος τό σύμβολον, αὐγὴν πυρὸς φέρουσαν ἐκ Τροίας φάτιν ἁλώσιμόν τε βάξιν : ὧδε γὰρ κρατεῖ γυναικὸς ἀνδρόβουλον ἐλπίζον κέαρ.  εὖτ᾽ ἂν δὲ νυκτίπλαγκτον ἔνδροσόν τ᾽ ἔχω εὐνὴν ὀνείροις οὐκ ἐπισκοπουμένην ἐμήν : φόβος γὰρ ἀνθ᾽ ὕπνου παραστατεῖ, τὸ μὴ βεβαίως βλέφαρα συμβαλεῖν ὕπνῳ:</l></body></text></TEI>'
 
-with open("tests/data/tei/ovidmet.xml", "r", encoding="utf-8") as myfile:
+with open("tests/fixtures/tei/ovidmet.xml", "r", encoding="utf-8") as myfile:
   tei = myfile.read()
 
 # we could use metadata the top of the file to supply
@@ -59,10 +61,10 @@ def server():
 def run(xsl=None):
 
     parser = Parser(config=None)
-    text = parser.parse(tei)
+    text = parser.parse_text(tei)
     print(text)
-    wrapper = Wrapper(config=None)
-    tokens = wrapper.tokenize(lang='en',text=text, sentences=False)
+    processor = Processor(config=None)
+    tokens = processor.tokenize(text=text, lang='en',sentencize=False, segon='seg')
 
     for token in tokens:
         print(token)
