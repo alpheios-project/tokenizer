@@ -23,13 +23,13 @@ class ProcessorTest(TestCase):
         tokenized = processor.tokenize(text=text, lang='lat')
         segment = tokenized[0]
         self.assertEqual(segment['index'],0)
-        self.assertEqual(segment['tb_sent'],'')
+        self.assertEqual(segment['data_tb_sent'],'')
         token = tokenized[0]['tokens'][0]
         self.assertEqual(token['text'],'In')
         self.assertFalse(token['start_sent'])
         self.assertFalse(token['is_punct'])
         self.assertFalse(token['lb_before'])
-        self.assertEqual(token['tb_word'],'')
+        self.assertEqual(token['data_tb_word'],'')
         self.assertEqual(token['index'],0)
         self.assertEqual(token['docIndex'],0)
 
@@ -73,6 +73,20 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[1]['tokens'][0]['docIndex'],8)
         self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
 
+    def test_tokenize_linesegcite(self):
+        text = self.readFixture(type='text', lang='lat', name='linesegcite.csv')
+        processor = Processor(config=None)
+        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline')
+        self.assertEqual(len(tokenized),4)
+        self.assertEqual(tokenized[0]['data_cite'],'citation1')
+        self.assertEqual(tokenized[0]['tokens'][0]['text'],'In')
+        self.assertEqual(tokenized[1]['data_cite'],'citation2')
+        self.assertEqual(tokenized[1]['tokens'][0]['text'],'corpora')
+        self.assertEqual(tokenized[2]['data_cite'],'citation3')
+        self.assertEqual(tokenized[2]['tokens'][0]['text'],'adspirate')
+        self.assertEqual(tokenized[3]['data_cite'],'citation4')
+        self.assertEqual(tokenized[3]['tokens'][0]['text'],'ad')
+
     def test_tokenize_linesegsent(self):
         text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
         processor = Processor(config=None)
@@ -88,8 +102,8 @@ class ProcessorTest(TestCase):
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segon='singleline', sentencize=True, tbseg=True, segstart=1)
         self.assertEqual(len(tokenized),20)
-        self.assertTrue(tokenized[0]['tb_sent'],1)
-        self.assertTrue(tokenized[1]['tb_sent'],2)
+        self.assertEqual(tokenized[0]['data_tb_sent'],'1')
+        self.assertEqual(tokenized[1]['data_tb_sent'],'2')
 
     def test_tokenize_doublelineseg(self):
         text = self.readFixture(type='text', lang='lat', name='doublelineseg.csv')
@@ -99,17 +113,27 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[1]['tokens'][0]['text'],'nullus')
         self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
 
+    def test_tokenize_doublelinesegcite(self):
+        text = self.readFixture(type='text', lang='lat', name='doublelinesegcite.csv')
+        processor = Processor(config=None)
+        tokenized = processor.tokenize(text=text, lang='lat', segon='doubleline')
+        self.assertEqual(len(tokenized),2)
+        self.assertTrue(tokenized[0]['data_cite'],'citation1')
+        self.assertTrue(tokenized[1]['data_cite'],'citation2')
+        self.assertEqual(tokenized[1]['tokens'][0]['text'],'nullus')
+        self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
+
     def test_tokenize_linesegcustomtb(self):
         text = self.readFixture(type='text', lang='lat', name='linesegtb.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segon='singleline', sentencize=True, tbseg=False, segstart=1)
         self.assertEqual(len(tokenized),3)
-        self.assertTrue(tokenized[0]['tb_sent'],10)
-        self.assertTrue(tokenized[0]['index'],0)
-        self.assertTrue(tokenized[1]['tb_sent'],11)
+        self.assertTrue(tokenized[0]['data_tb_sent'],'10')
         self.assertTrue(tokenized[0]['index'],1)
-        self.assertTrue(tokenized[1]['tb_sent'],12)
-        self.assertTrue(tokenized[0]['index'],2)
+        self.assertEqual(tokenized[1]['data_tb_sent'],'11')
+        self.assertEqual(tokenized[1]['index'],2)
+        self.assertEqual(tokenized[2]['data_tb_sent'],'12')
+        self.assertTrue(tokenized[2]['index'],3)
 
 
 
