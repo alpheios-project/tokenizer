@@ -55,13 +55,28 @@ class TokenizeRequest(Resource):
             abort(400,str(errors))
 
         meta = {}
+        config = schema.load(request.args)
         if (request.content_type == 'application/xml'):
+            # TODO we should maybe report an error if the lang of the text
+            # differs from what was sent in the request arg
             parser = Parser(config=None)
             text = parser.parse_text(text)
             meta = parser.parse_meta(text)
+            # segments have been parsed from xml element to new line
+            config['segments'] = 'newline'
 
-        config = schema.load(request.args)
-        tokens = self.call_tokenizer(text=text,config=config)
+        segmentMetadataTemplate = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}' if config['tbseg'] else ""
+        print(f"text={text}",file=sys.stdout)
+
+        processor = Processor(config=None)
+        tokens = processor.tokenize(
+            text=text,
+            lang=config['lang'],
+            sentencize=config['sentencize'],
+            segmentOn=config['segments'],
+            segmentStart=config['segstart'],
+            segmentMetadataTemplate=segmentMetadataTemplate
+        )
 
         tokenized = {
             'meta': meta,
@@ -69,11 +84,4 @@ class TokenizeRequest(Resource):
         }
 
         return tokenized, 201
-
-    def call_tokenizer(self, text=None, config=None):
-        """ Execute a tokenization request
-        """
-        wrapper = Wrapper(config=None)
-        tokens = wrapper.tokenize(text=text, config=config)
-        return tokens
 

@@ -64,7 +64,7 @@ def run(xsl=None):
     text = parser.parse_text(tei)
     print(text)
     processor = Processor(config=None)
-    tokens = processor.tokenize(text=text, lang='en',sentencize=False, segon='seg')
+    tokens = processor.tokenize(text=text, lang='en',sentencize=False, segmentOn='seg')
 
     for token in tokens:
         print(token)

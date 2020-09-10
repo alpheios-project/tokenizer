@@ -6,6 +6,7 @@ import os
 class ProcessorTest(TestCase):
 
     def setUp(self):
+        self.tbrequestmeta = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}'
         pass
 
     def tearDown(self):
@@ -28,7 +29,7 @@ class ProcessorTest(TestCase):
         self.assertEqual(token['text'],'In')
         self.assertFalse(token['start_sent'])
         self.assertFalse(token['is_punct'])
-        self.assertFalse(token['lb_before'])
+        self.assertFalse(token['line_break_before'])
         self.assertEqual(token['alpheios_data_tb_word'],'')
         self.assertEqual(token['index'],0)
         self.assertEqual(token['docIndex'],0)
@@ -43,9 +44,9 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[0]['tokens'][0]['index'],0)
         self.assertEqual(tokenized[0]['tokens'][0]['docIndex'],0)
         self.assertEqual(tokenized[0]['tokens'][6]['text'],'formas')
-        self.assertFalse(tokenized[0]['tokens'][6]['lb_before'])
+        self.assertFalse(tokenized[0]['tokens'][6]['line_break_before'])
         self.assertEqual(tokenized[0]['tokens'][7]['text'],'corpora')
-        self.assertTrue(tokenized[0]['tokens'][7]['lb_before'])
+        self.assertTrue(tokenized[0]['tokens'][7]['line_break_before'])
 
     def test_tokenize_singlesegsent(self):
         text = self.readFixture(type='text', lang='lat', name='singleseg.csv')
@@ -56,27 +57,27 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[0]['tokens'][0]['start_sent'])
         self.assertTrue(tokenized[0]['tokens'][9]['start_sent'])
         self.assertEqual(tokenized[0]['tokens'][6]['text'],'formas')
-        self.assertFalse(tokenized[0]['tokens'][6]['lb_before'])
+        self.assertFalse(tokenized[0]['tokens'][6]['line_break_before'])
         self.assertEqual(tokenized[0]['tokens'][7]['text'],'corpora')
-        self.assertTrue(tokenized[0]['tokens'][7]['lb_before'])
+        self.assertTrue(tokenized[0]['tokens'][7]['line_break_before'])
 
     def test_tokenize_lineseg(self):
         text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline')
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline')
         self.assertEqual(len(tokenized),20)
         self.assertEqual(len(tokenized[0]['tokens']),7)
         self.assertEqual(len(tokenized[19]['tokens']),9)
         self.assertFalse(tokenized[0]['tokens'][0]['start_sent'])
-        self.assertFalse(tokenized[0]['tokens'][-1]['lb_before'])
+        self.assertFalse(tokenized[0]['tokens'][-1]['line_break_before'])
         self.assertEqual(tokenized[1]['tokens'][0]['index'],0)
         self.assertEqual(tokenized[1]['tokens'][0]['docIndex'],8)
-        self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
+        self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_linesegcite(self):
         text = self.readFixture(type='text', lang='lat', name='linesegcite.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline')
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline')
         self.assertEqual(len(tokenized),4)
         self.assertEqual(tokenized[0]['alpheios_data_cite'],'citation1')
         self.assertEqual(tokenized[0]['tokens'][0]['text'],'In')
@@ -90,7 +91,7 @@ class ProcessorTest(TestCase):
     def test_tokenize_linesegsent(self):
         text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline', sentencize=True)
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True)
         self.assertEqual(len(tokenized),20)
         self.assertEqual(len(tokenized[0]['tokens']),7)
         self.assertEqual(len(tokenized[19]['tokens']),9)
@@ -100,7 +101,13 @@ class ProcessorTest(TestCase):
     def test_tokenize_linesegsenttbsent(self):
         text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline', sentencize=True, tbseg=True, segstart=1)
+        tokenized = processor.tokenize(
+            text=text,
+            lang='lat',
+            sentencize=True,
+            segmentOn='singleline',
+            segmentStart=1,
+            segmentMetadataTemplate=self.tbrequestmeta)
         self.assertEqual(len(tokenized),20)
         self.assertEqual(tokenized[0]['alpheios_data_tb_sent'],'1')
         self.assertEqual(tokenized[1]['alpheios_data_tb_sent'],'2')
@@ -108,25 +115,25 @@ class ProcessorTest(TestCase):
     def test_tokenize_doublelineseg(self):
         text = self.readFixture(type='text', lang='lat', name='doublelineseg.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='doubleline')
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='doubleline')
         self.assertEqual(len(tokenized),2)
         self.assertEqual(tokenized[1]['tokens'][0]['text'],'nullus')
-        self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
+        self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_doublelinesegcite(self):
         text = self.readFixture(type='text', lang='lat', name='doublelinesegcite.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='doubleline')
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='doubleline')
         self.assertEqual(len(tokenized),2)
         self.assertTrue(tokenized[0]['alpheios_data_cite'],'citation1')
         self.assertTrue(tokenized[1]['alpheios_data_cite'],'citation2')
         self.assertEqual(tokenized[1]['tokens'][0]['text'],'nullus')
-        self.assertTrue(tokenized[1]['tokens'][0]['lb_before'])
+        self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_linesegcustomtb(self):
         text = self.readFixture(type='text', lang='lat', name='linesegtb.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segon='singleline', sentencize=True, tbseg=False, segstart=1)
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True, segmentStart=1)
         self.assertEqual(len(tokenized),3)
         self.assertTrue(tokenized[0]['alpheios_data_tb_sent'],'10')
         self.assertTrue(tokenized[0]['index'],1)

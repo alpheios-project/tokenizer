@@ -2,29 +2,27 @@ import re
 
 class Parser():
 
-    METADATA_EXTENSIONS = [
+    METADATA_FIELDS = [
         {
             'name': 'TB_SENT',
-            'segment_level': True,
             'default': '',
-            'forward': True
         },
         {
             'name': 'TB_WORD',
-            'segment_level': False,
             'default': '',
-            'forward': True
         },
         {
             'name': 'CITE',
-            'segment_level': True,
             'default': '',
-            'forward': True
         }
 
     ]
 
-    METADATA_FIELDS = '|'.join(list(map(lambda i: i['name'], METADATA_EXTENSIONS )))
+    METADATA_FIELD_RE = '|'.join(list(map(lambda i: i['name'], METADATA_FIELDS )))
+    
+    @staticmethod
+    def metadata_field_name(name) :
+        return f"alpheios_data_{name.lower()}"
 
     def parseLine(self,line="",extra="",replace=False):
         metadata = {}
@@ -43,7 +41,7 @@ class Parser():
 
     def parseToken(self,token):
         r_meta = re.compile(r'^META\|.*')
-        r_item = re.compile(rf"^({Parser.METADATA_FIELDS})_(.+)$")
+        r_item = re.compile(rf"^({Parser.METADATA_FIELD_RE})_(.+)$")
         metadata = {}
         if r_meta.match(token):
             data = token.split('|')
