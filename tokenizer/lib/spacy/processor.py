@@ -5,12 +5,41 @@ import sys
 from marshmallow import Schema, fields
 from tokenizer.lib.meta.parser import Parser
 
-Token.set_extension('alpheios_segment_break_before',default=False)
-Token.set_extension('alpheios_line_break_before',default=False)
-Token.set_extension('alpheios_data_tb_word',default=None)
-Token.set_extension('alpheios_data_tb_sent',default=None)
-Token.set_extension('alpheios_data_cite',default=None)
-Token.set_extension('alpheios_is_meta',default=False)
+EXTENSIONS = [
+    { 'name': 'alpheios_segment_break_before',
+      'default': False,
+      'forward': True,
+      'segment_level': False,
+      'source': None
+
+    },
+    { 'name': 'alpheios_line_break_before',
+      'default': False,
+      'forward': True,
+      'segment_level': False,
+      'source': None
+    },
+    { 'name': 'alpheios_is_meta',
+      'default': False,
+      'forward': False,
+      'segment_level': False,
+      'source': None
+    }
+]
+
+for extension in Parser.METADATA_EXTENSIONS:
+    EXTENSIONS.append(
+        {
+            'name': 'alpheios_data_' + extension['name'].lower(),
+            'default': extension['default'],
+            'segment_level': extension['segment_level'],
+            'forward': True,
+            'source': extension['name']
+        }
+    )
+
+for extension in EXTENSIONS:
+    Token.set_extension(extension['name'],default=extension['default'])
 
 class Processor():
     """ Spacy Wrapper Class """
@@ -36,13 +65,25 @@ class Processor():
 
 
 
-    def _new_segment(self, index=0, metadata={}):
+    def _new_segment(self, index=0, token=None, metadata=None):
         segment = {'index':index, 'tokens':[] }
-        if metadata:
-            for item in metadata:
-               key = 'data_' + item.lower()
-               segment[key] = metadata[item]
+        for extension in EXTENSIONS:
+            if (
+                token is not None
+                and getattr(token._,extension['name'])
+                and extension['forward']
+                and extension['segment_level']
+            ):
+                segment[extension['name']] = getattr(token._,extension['name'])
+            if extension['source'] in metadata:
+                segment[extension['name']] = metadata[extension['source']]
         return segment
+
+    def _segment_metadata_override(self,tbseg,segNum):
+        # if we are automatically calculating the tb sentence reference from the
+        # segment number we need to add that to the segment metadata
+        return f"META|TB_SENT_{segNum}" if tbseg else ""
+
 
     def tokenize(self, text=None, lang=None, segon=None, sentencize=False, segstart=0, tbseg=False):
         nlp = self._load_model(lang)
@@ -59,9 +100,9 @@ class Processor():
             def set_meta(key=None,value=None,fromToken=None,toToken=None,advanceBreaks=True):
                 fromToken._.set('alpheios_is_meta',True)
                 toToken._.set(key,value)
-                if advanceBreaks:
-                    toToken._.set('alpheios_line_break_before',fromToken._.alpheios_line_break_before)
-                    toToken._.set('alpheios_segment_break_before',fromToken._.alpheios_segment_break_before)
+                for extension in EXTENSIONS:
+                    if getattr(fromToken._,extension['name']) and extension['forward']:
+                        toToken._.set(extension['name'],getattr(fromToken._,extension['name']))
 
             for token in doc[:-1]:
                 metadata = self.metaParser.parseToken(token.text)
@@ -78,11 +119,9 @@ class Processor():
 
         segNum = segstart
 
-        start_meta, text = self.metaParser.parseLine(line=text,replace=True)
-        if not 'TB_SENT' in start_meta:
-            start_meta['TB_SENT'] = str(segNum) if tbseg else ''
+        start_meta, text = self.metaParser.parseLine(line=text,extra=self._segment_metadata_override(tbseg,segNum),replace=True)
         doc = nlp(text, disable=['parser','tagger', 'ner'])
-        currentSegment = self._new_segment(index=segNum,metadata=start_meta)
+        currentSegment = self._new_segment(index=segNum,token=None,metadata=start_meta)
         segments = [currentSegment]
         tokenIndex = 0
         for token in doc:
@@ -92,15 +131,8 @@ class Processor():
                     or (segon == 'doubleline' and token._.alpheios_segment_break_before)
                 ):
                     segNum = segNum + 1
-                    if tbseg:
-                        tbSeg = str(segNum)
-                    elif token._.alpheios_data_tb_sent is not None:
-                        tbSeg = token._.alpheios_data_tb_sent
-                    else:
-                        tbSeg = ''
-                    metadata = { 'TB_SENT': tbSeg }
-                    metadata['CITE'] = token._.alpheios_data_cite
-                    currentSegment = self._new_segment(index=segNum,metadata = metadata)
+                    metadata, null = self.metaParser.parseLine(extra=self._segment_metadata_override(tbseg,segNum))
+                    currentSegment = self._new_segment(index=segNum,token=token,metadata=metadata)
                     segments.append(currentSegment)
                     tokenIndex = 0
                 returnTok = {
@@ -110,7 +142,7 @@ class Processor():
                   'is_punct': token.is_punct,
                   'start_sent': token.is_sent_start if sentencize and token.is_sent_start is not None else False,
                   'lb_before': token._.alpheios_line_break_before,
-                  'data_tb_word': token._.alpheios_data_tb_word if token._.alpheios_data_tb_word is not None else ''
+                  'alpheios_data_tb_word': token._.alpheios_data_tb_word
                 }
                 currentSegment['tokens'].append(returnTok)
                 tokenIndex = tokenIndex + 1

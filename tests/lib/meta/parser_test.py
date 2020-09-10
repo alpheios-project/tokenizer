@@ -23,6 +23,9 @@ class ParserTest(TestCase):
         meta, line = self.parser.parseLine(line='META|TB_SENT_1 abc',replace=True)
         self.assertEqual(meta,{'TB_SENT': '1'})
         self.assertEqual(line, 'abc' )
+        meta, line = self.parser.parseLine(line='META|TB_SENT_1 abc',extra="META|TB_SENT_10",replace=True)
+        self.assertEqual(meta,{'TB_SENT': '10'})
+        self.assertEqual(line, 'abc' )
 
     def test_parseToken(self):
         self.assertEqual(self.parser.parseToken('foo'),{})
