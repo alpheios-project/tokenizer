@@ -8,12 +8,24 @@ from flask_cors import CORS
 from tokenizer.lib.spacy.processor import Processor
 from tokenizer.lib.tei.parser import Parser
 from tokenizer.schemas import TokenizeTeiRequestSchema, TokenizeTextRequestSchema
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.flask import FlaskPlugin
 import sys
+import json
 
 app = Flask("tokenizer")
 #api = Api(app=app, default_mediatype='application/json')
 ma = Marshmallow(app)
 #cache = Cache(app,config={'CACHE_TYPE':'simple'})
+
+# Create an APISpec
+spec = APISpec(
+    title="Alpheios Tokenizer Service",
+    version="1.0.0",
+    openapi_version="3.0.2",
+    plugins=[FlaskPlugin(), MarshmallowPlugin()],
+)
 
 def get_app():
     return app
@@ -25,10 +37,18 @@ def init_app(app=None, config_file="config.cfg",cache_config=None):
 
 @app.route('/tokenize', methods=['POST'])
 def tokenize():
-    """ Respond to a POST request
-    :param format: the format of the data (required)
-    :param lang: the language of the data (required)
-    :return: tokens
+    """ tokenize endpoint
+    ---
+    post:
+      description: tokenize text
+      parameters:
+        - in: query
+          schema: TokenizeTeiRequestSchema
+      responses:
+        201:
+          content:
+            application/json:
+              schema: TokenizeTextRequestSchema
     """
     # TODO parse per content-type header
     # this is just plain text
@@ -78,3 +98,10 @@ def tokenize():
 
     return tokenized, 201
 
+@app.route("/")
+def api():
+    return(json.dumps(spec.to_dict(),indent=2))
+
+
+with app.test_request_context():
+    spec.path(view=tokenize)

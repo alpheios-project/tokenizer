@@ -11,6 +11,8 @@ setup(
     description='Tokenizer for Alpheios',
     test_suite="tests",
     install_requires=[
+        "apispec<4.0.0",
+        "apispec-webframeworks",
         "click",
         "flask==1.1.2",
         "Flask-Cache==0.13.1",
