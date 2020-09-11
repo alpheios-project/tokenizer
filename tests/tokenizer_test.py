@@ -44,7 +44,6 @@ class TokenizerTestCase(TestCase):
     def test_tokenize_text_defaults(self):
         text = self.readFixture(type='text', name='singleseg.csv')
         rv = self.client.post('/tokenize?lang=en',data=text, headers={'Content-Type': 'text/plain'})
-        print(rv)
         data = json.loads(rv.get_data(as_text=True))
         self.assertEqual(len(data['tokens']),4)
 

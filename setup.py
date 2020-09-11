@@ -15,7 +15,7 @@ setup(
         "flask==1.1.2",
         "Flask-Cache==0.13.1",
         "flask-cors==2.0.0",
-        "Flask-Restful==0.3.8",
+        "flask-marshmallow",
         "requests>=2.8.1",
         "requests-cache==0.4.9",
         "lxml<5.0.0",
