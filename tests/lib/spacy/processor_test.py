@@ -12,14 +12,14 @@ class ProcessorTest(TestCase):
     def tearDown(self):
         pass
 
-    def readFixture(self, type=None, lang=None, name=None):
-        fixture = os.path.join('tests', 'fixtures', type, lang, name)
+    def readFixture(self, type=None, name=None):
+        fixture = os.path.join('tests', 'fixtures', type, name)
         with open(fixture, 'r', encoding="utf-8") as (stream):
             text = stream.read()
         return text
 
     def test_props(self):
-        text = self.readFixture(type='text', lang='lat', name='singleseg.csv')
+        text = self.readFixture(type='text', name='singleseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat')
         segment = tokenized[0]
@@ -35,7 +35,7 @@ class ProcessorTest(TestCase):
         self.assertEqual(token['docIndex'],0)
 
     def test_tokenize_singleseg(self):
-        text = self.readFixture(type='text', lang='lat', name='singleseg.csv')
+        text = self.readFixture(type='text', name='singleseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat')
         self.assertEqual(len(tokenized),1)
@@ -49,7 +49,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[0]['tokens'][7]['line_break_before'])
 
     def test_tokenize_singlesegsent(self):
-        text = self.readFixture(type='text', lang='lat', name='singleseg.csv')
+        text = self.readFixture(type='text', name='singleseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', sentencize=True)
         self.assertEqual(len(tokenized),1)
@@ -62,7 +62,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[0]['tokens'][7]['line_break_before'])
 
     def test_tokenize_lineseg(self):
-        text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
+        text = self.readFixture(type='text', name='lineseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline')
         self.assertEqual(len(tokenized),20)
@@ -75,7 +75,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_linesegcite(self):
-        text = self.readFixture(type='text', lang='lat', name='linesegcite.csv')
+        text = self.readFixture(type='text', name='linesegcite.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline')
         self.assertEqual(len(tokenized),4)
@@ -89,7 +89,7 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[3]['tokens'][0]['text'],'ad')
 
     def test_tokenize_linesegsent(self):
-        text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
+        text = self.readFixture(type='text', name='lineseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True)
         self.assertEqual(len(tokenized),20)
@@ -99,7 +99,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[1]['tokens'][2]['start_sent'])
 
     def test_tokenize_linesegsenttbsent(self):
-        text = self.readFixture(type='text', lang='lat', name='lineseg.csv')
+        text = self.readFixture(type='text', name='lineseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(
             text=text,
@@ -113,7 +113,7 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[1]['alpheios_data_tb_sent'],'2')
 
     def test_tokenize_doublelineseg(self):
-        text = self.readFixture(type='text', lang='lat', name='doublelineseg.csv')
+        text = self.readFixture(type='text', name='doublelineseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='doubleline')
         self.assertEqual(len(tokenized),2)
@@ -121,7 +121,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_doublelinesegcite(self):
-        text = self.readFixture(type='text', lang='lat', name='doublelinesegcite.csv')
+        text = self.readFixture(type='text', name='doublelinesegcite.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='doubleline')
         self.assertEqual(len(tokenized),2)
@@ -131,7 +131,7 @@ class ProcessorTest(TestCase):
         self.assertTrue(tokenized[1]['tokens'][0]['line_break_before'])
 
     def test_tokenize_linesegcustomtb(self):
-        text = self.readFixture(type='text', lang='lat', name='linesegtb.csv')
+        text = self.readFixture(type='text', name='linesegtb.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True, segmentStart=1)
         self.assertEqual(len(tokenized),3)

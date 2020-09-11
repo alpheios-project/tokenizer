@@ -1,5 +1,4 @@
-<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:py="http://codespeak.net/lxml/objectify/pytype"
-  py:pytype="TREE">
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
   <text>
     <body n="urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1">
       <div type="edition" xml:lang="lat" n="urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1">

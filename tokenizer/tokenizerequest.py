@@ -1,24 +1,41 @@
 from flask_restful import Resource
 from flask import request, abort, jsonify
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 from tokenizer.lib.spacy.processor import Processor
 from tokenizer.lib.tei.parser import Parser
 import sys
 
 class TokenizeTeiRequestSchema(Schema):
-    segments = fields.Str(required=False,default="seg", missing="seg")
-    sentencize = fields.Boolean(required=False, default=True, missing=True)
-    linebreaks = fields.Str(required=False,default="div,l,p,ab,seg", missing="div,l,p,ab,seg")
+    segments = fields.Str(
+        required=False,
+        missing=Parser.DEFAULT_SEGMENT_ELEMS
+    )
+    ignore= fields.Str(
+        required=False,
+        missing=Parser.DEFAULT_IGNORE_ELEMS
+    )
+    linebreaks = fields.Str(
+        required=False,
+        missing=Parser.DEFAULT_LINEBREAK_ELEMS
+    )
     lang = fields.Str(required=True)
-    tbseg = fields.Boolean(required=False, default=False, missing=False)
-    segstart = fields.Integer(required=False, default=1, missing=1)
+    sentencize = fields.Boolean(required=False, missing=False)
+    tbseg = fields.Boolean(required=False, missing=False)
+    segstart = fields.Integer(required=False, missing=0)
 
 class TokenizeTextRequestSchema(Schema):
-    segments = fields.Str(required=False,default="singleline",missing="singleline")
-    sentencize = fields.Boolean(required=False, default=False, missing=False)
+    segments = fields.Str(
+        required=False,
+        missing="singleline",
+        validate=validate.OneOf(["singleline","doubline"])
+    )
+    sentencize = fields.Boolean(
+        required=False,
+        missing=False
+    )
     lang = fields.Str(required=True)
-    tbseg = fields.Boolean(required=False, default=False, missing=False)
-    segstart = fields.Integer(required=False, default=1, missing=1)
+    tbseg = fields.Boolean(required=False, missing=False)
+    segstart = fields.Integer(required=False, missing=0)
 
 class TokenizeRequest(Resource):
     """ Responds to a request for tokenization """
@@ -60,13 +77,15 @@ class TokenizeRequest(Resource):
             # TODO we should maybe report an error if the lang of the text
             # differs from what was sent in the request arg
             parser = Parser(config=None)
-            text = parser.parse_text(text)
+            text = parser.parse_text(text,
+                segmentElems=config['segments'],
+                ignoreElems=config['ignore'],
+                linebreakElems=config['linebreaks'])
             meta = parser.parse_meta(text)
-            # segments have been parsed from xml element to new line
-            config['segments'] = 'newline'
+            # segments have been parsed from xml element to doubleline
+            config['segments'] = 'doubleline'
 
         segmentMetadataTemplate = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}' if config['tbseg'] else ""
-        print(f"text={text}",file=sys.stdout)
 
         processor = Processor(config=None)
         tokens = processor.tokenize(

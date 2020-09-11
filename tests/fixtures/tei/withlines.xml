@@ -1,0 +1,17 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <text>
+    <body>
+      <div type="edition" xml:lang="lat" n="urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1">
+        <div type="textpart" subtype="book" n="1">
+          <head>header</head>
+          <l n="10">nullus adhuc mundo praebebat lumina Titan,</l>
+          <l n="11">nec nova crescendo reparabat cornua Phoebe,</l>
+        </div>
+        <div type="textpart" subtype="book" n="2">
+          <l n="21">Hanc deus et melior litem natura diremit.</l>
+          <l n="22">Nam caelo terras et terris abscidit undas,</l>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
