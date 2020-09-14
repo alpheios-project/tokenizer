@@ -5,6 +5,7 @@ import sys
 from marshmallow import Schema, fields
 from tokenizer.lib.meta.parser import Parser
 
+# extensions to the Spacy Token API for processing segment and line information
 EXTENSIONS = [
     { 'name': 'segment_break_before',
       'default': False,
@@ -27,6 +28,7 @@ EXTENSIONS = [
     }
 ]
 
+# extensions to the Spacy Token API for Alpheios Metadata
 for field in Parser.METADATA_FIELDS:
     EXTENSIONS.append(
         {
@@ -38,35 +40,63 @@ for field in Parser.METADATA_FIELDS:
         }
     )
 
-
+# adds the Token extensions to the Spacy processor
 for extension in EXTENSIONS:
     Token.set_extension(extension['name'],default=extension['default'])
 
 class Processor():
-    """ Spacy Wrapper Class """
+    """ Wraps the Spacy Tokenizer to process text into segments and tokens """
 
-    def __init__(self, config, **kwargs):
+    def __init__(self,config={}):
         """ Constructor
-        :param config: the app config
+
+        :param config: app level configuration
         :type config: dict
         """
         self.metaParser = Parser()
 
     def _load_model(self, lang=None):
+        """ private method to load the correct tokenizer model for the language
+            of the text.
+
+            :param lang: the language of the text
+            :type lang: string
+        """
+
+        #TODO language-specific handling still needs to be implemented,
+        # this just uses the base english model
         nlp = spacy.load("en_core_web_sm")
 
-        # TODO max length from config
+        # TODO we should get the max length from the app configuration
+        # need to find out if this can be unlimited
         nlp.max_length = 4000000
 
         return nlp
 
     def _add_sentencizer(self, nlp=None, lang=None):
+        """ private method to add a sentencizer to the pipeline
+
+            :param nlp: the spacy pipeline object
+            :type nlp: pipeline:
+            :param lang: the language of the text
+            :type lang: string
+        """
         sentencizer = nlp.create_pipe("sentencizer")
         nlp.add_pipe(sentencizer)
 
-
-
     def _new_segment(self, index=0, token=None, metadata=None):
+        """ private method to create a new segment container
+
+            :param index: index of the segment
+            :type index: int
+            :param token: token which creates the segment break
+            :type token: Token
+            :param metadata: additional segment level metadata
+            :type metadata: dict
+
+            :return: the segment object
+            :rtype: dict
+        """
         segment = {'index':index, 'tokens':[], 'metadata': {} }
         for extension in EXTENSIONS:
             if (
@@ -80,18 +110,41 @@ class Processor():
         return segment
 
     def _insert_metadata(self,template="",index=None):
-        # if we are automatically calculating the tb sentence reference from the
-        # segment number we need to add that to the segment metadata
+        """ private method to insert metadata into text to be tokenized
+
+            :param template: the template for the metadata
+            :type template: string
+            :param index: the index number to replace in the template
+            :type index: int
+
+            :return: the updated text
+            :rtype: string
+        """
         return re.sub("{ALPHEIOS_SEGMENT_INDEX}",str(index),template)
 
     def _segmentize(
         self,
         doc=None,
-        sentencize=False,
         segmentOn="singleline",
         segmentStart=0,
         segmentStartMetadata={},
         segmentMetadataTemplate=""):
+        """ private method to apply segmentation to the results of the spacy tokenization
+
+            :param doc: the from the tokenizer
+            :type doc: Document
+            :param segmentOn: what indicates a segment (singleline or doubleline)
+            :type segmentOn: string
+            :param segmentStart: starting index for the segments
+            :type segmentStart: int
+            :param segmentStartMetadata: metadata to add to the first segment
+            :type segmentStartMetadata: dict
+            :param segmentMetadataTemplate: a template to use for segment metadata to be added to the text
+            :type segmentMetadataTemplate: string
+
+            :return: list of segments containing tokens
+            :rtype: dict[]
+        """
 
         # create the first segment
         currentSegment = self._new_segment(
@@ -144,6 +197,25 @@ class Processor():
         segmentOn=None,
         segmentStart=0,
         segmentMetadataTemplate=""):
+        """ tokenize text
+
+            :param text: the text to be tokenized
+            :type text string
+            :param lang: the language of the text
+            :type text: string
+            :param sentencize: whether or not to apply a sentencizing algorithm (not currently used)
+            :type sentencize: boolean
+            :param segmentOn: separator which indicates a new segment ("singleline" or "doubleline")
+            :type segmentOn: string
+            :param segmentStart: index for starting segment
+            :type segmentStart: int
+            :param segmentMetadataTemplate: a template for segment metadata to be added to the text
+            :type segmentMetadata: string
+
+            :return: results of tokenization and segmentation
+            :rtype: list of segments, each containint a list of tokens
+        """
+
         nlp = self._load_model(lang)
         if (sentencize):
             self._add_sentencizer(nlp=nlp)
@@ -178,7 +250,6 @@ class Processor():
         doc = nlp(text, disable=['parser','tagger', 'ner'])
         return self._segmentize(
             doc=doc,
-            sentencize=sentencize,
             segmentOn=segmentOn,
             segmentStart=segmentStart,
             segmentStartMetadata=start_meta,

@@ -19,7 +19,7 @@ app = Flask("tokenizer")
 ma = Marshmallow(app)
 babel = Babel(app)
 
-# Create an APISpec
+# Create an OpenAPI Specification for the service
 spec = APISpec(
     title="Alpheios Tokenizer Service",
     version="1.0.0",
@@ -28,25 +28,39 @@ spec = APISpec(
 )
 
 def get_app():
+    """ Returns the Flask application
+    """
     return app
 
 def init_app(app=None, config_file="config.py"):
+    """ Initializes the Flask application
+
+    :param app: the Flask app
+    :param config_file: path to a configuration file
+    """
     app.config.from_pyfile(config_file,silent=False)
 
 @babel.localeselector
 def get_locale():
+    """ Get the locale for schema descriptions
+
+        :return: locale per request
+        :rtype: string
+    """
     return request.args['locale']
 
 @app.route("/")
 def api():
+    """ Base endpoint - returns the OpenAPI schema for the service
+    """
     return(json.dumps(spec.to_dict(),indent=2))
 
 @app.route('/tokenize/tei', methods=['POST'])
 def tokenize_tei():
-    """ tokenize tei endpoint
+    """ Endpoint for tokenize TEI XML request
     ---
     post:
-      description: tokenize a TEI XML text
+      description: Tokenize a TEI XML text
       parameters:
         - in: query
           schema: TokenizeTeiRequestSchema
@@ -80,17 +94,17 @@ def tokenize_tei():
     meta = parser.parse_meta(text)
     # segments have been parsed from xml element to doubleline
     config['segments'] = 'doubleline'
-    segments = _call_tokenizer(text=text,meta=meta,config=config)
+    segments = _call_tokenizer(text=text,config=config)
     resp_schema = TokenizeResponseSchema()
     return resp_schema.dump({ 'meta': meta, 'segments': segments}), 201
 
 
 @app.route('/tokenize/text', methods=['POST'])
 def tokenize_text():
-    """ tokenize endpoint
+    """ Endpoint for tokenize plain text request
     ---
     post:
-      description: tokenize text
+      description: Tokenize a plain text document.
       parameters:
         - in: query
           schema: TokenizeTextRequestSchema
@@ -114,13 +128,21 @@ def tokenize_text():
     meta = {}
 
     config = schema.load(request.args)
-    segments = _call_tokenizer(text=text,meta=meta,config=config)
+    segments = _call_tokenizer(text=text,config=config)
     resp_schema = TokenizeResponseSchema()
     return resp_schema.dump({ 'meta': meta, 'segments': segments}), 201
 
-def _call_tokenizer(text=None, meta=None, config=None):
+def _call_tokenizer(text=None, config=None):
+    """ private method - executes the tokenization request
+
+        :param text: Text to be tokenized
+        :param config: request arguments
+
+        :return: segmented token
+        :rtype: SegmentSchema[]
+    """
     segmentMetadataTemplate = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}' if config['tbseg'] else ""
-    processor = Processor(config=None)
+    processor = Processor()
     segments = processor.tokenize(
         text=text,
         lang=config['lang'],
@@ -138,8 +160,10 @@ def _call_tokenizer(text=None, meta=None, config=None):
         segs.append(segmentsSchema.dump({'tokens': tokens, 'index':segment['index'], 'metadata':segment['metadata']}))
     return segs
 
+## Add tokenize_tei operation to the OpenApi doc
 with app.test_request_context():
     spec.path(view=tokenize_tei)
 
+# Add tokenize_text operation to the OpenApi doc
 with app.test_request_context():
     spec.path(view=tokenize_text)

@@ -3,6 +3,8 @@ import pkg_resources
 import re
 
 class Parser():
+    """ a TEI XML Parser
+    """
     DEFAULT_SEGMENT_ELEMS = "body"
     DEFAULT_IGNORE_ELEMS = "label,ref,milestone,orig,abbr,head,title,teiHeader,del,g,bibl,front,back,speaker"
     DEFAULT_LINEBREAK_ELEMS = "p,div,seg,l,ab"
@@ -19,7 +21,16 @@ class Parser():
         self.text_xslt_transformer = etree.XSLT(etree.XML(text_xslt))
 
     def parse_meta(self, tei):
-        # TODO we should try to parse the metadata from the TEI header
+        """ Parses metadata from the TEI XML Document
+
+            :param tei: TEI XML Document
+            :type tei: string
+
+            :return: metadata
+            :rtype: dict
+        """
+        # TODO Still needs to be implemented - we will parse the metadata
+        # from the TEI header
         meta = {
             'title': 'dummy title',
             'author': 'dummy author'
@@ -32,6 +43,20 @@ class Parser():
         ignoreElems=DEFAULT_IGNORE_ELEMS,
         linebreakElems=DEFAULT_LINEBREAK_ELEMS
     ):
+        """ Parses the text from the TEI XML Document
+
+            :param tei: TEI XML Document
+            :type tei: string
+            :param segmentElems: comma separated list of elements which indicate segments
+            :type segmentElems: string
+            :param ignoreElems: comma separated list of elements to ignore
+            :type ignoreElems: string
+            :param linebreakElems: comma separated list of elements which should retain linebreaks after
+            :type linebreakElems: string
+
+            :return: plain text ready for tokenization
+            :rtype: string
+        """
         segmentList = "".join(map(lambda i: f" {i} ",segmentElems.split(",")))
         ignoreList = "".join(map(lambda i: f" {i} ",ignoreElems.split(",")))
         linebreakList = "".join(map(lambda i: f" {i} ",linebreakElems.split(",")))
@@ -46,6 +71,14 @@ class Parser():
         return self.clean_text(str(text))
 
     def clean_text(self,text):
+        """ convert the results of XSLT conversion to format expected by the tokenizer
+
+            :param text: the text
+            :type text: string
+
+            :return: clean text as string
+            :rtype: string
+        """
         p = re.compile(r'\s+',re.DOTALL)
         text = p.sub(' ',text)
         p = re.compile(r'(ALPHEIOS_LINE_BREAK\s*)+',re.DOTALL)
