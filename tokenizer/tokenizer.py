@@ -1,9 +1,6 @@
 # coding=utf8
 from flask import Flask,abort,make_response,request
-#from flask.ext.cache import Cache
-from flask_restful import Resource, Api, reqparse
 from flask_marshmallow import Marshmallow
-#from marshmallow import Schema, fields, validate
 from flask_cors import CORS
 from flask_babel import Babel, gettext
 from tokenizer.lib.spacy.processor import Processor
