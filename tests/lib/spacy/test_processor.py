@@ -27,8 +27,7 @@ class ProcessorTest(TestCase):
         self.assertNotIn('alpheios_data_tb_sent',segment)
         token = tokenized[0]['tokens'][0]
         self.assertEqual(token['text'],'In')
-        self.assertFalse(token['start_sent'])
-        self.assertFalse(token['is_punct'])
+        self.assertFalse(token['punct'])
         self.assertFalse(token['line_break_before'])
         self.assertEqual(token['alpheios_data_tb_word'],'')
         self.assertEqual(token['index'],0)
@@ -40,22 +39,8 @@ class ProcessorTest(TestCase):
         tokenized = processor.tokenize(text=text, lang='lat')
         self.assertEqual(len(tokenized),1)
         self.assertEqual(len(tokenized[0]['tokens']),32)
-        self.assertFalse(tokenized[0]['tokens'][0]['start_sent'])
         self.assertEqual(tokenized[0]['tokens'][0]['index'],0)
         self.assertEqual(tokenized[0]['tokens'][0]['docIndex'],0)
-        self.assertEqual(tokenized[0]['tokens'][6]['text'],'formas')
-        self.assertFalse(tokenized[0]['tokens'][6]['line_break_before'])
-        self.assertEqual(tokenized[0]['tokens'][7]['text'],'corpora')
-        self.assertTrue(tokenized[0]['tokens'][7]['line_break_before'])
-
-    def test_tokenize_singlesegsent(self):
-        text = self.readFixture(type='text', name='singleseg.csv')
-        processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', sentencize=True)
-        self.assertEqual(len(tokenized),1)
-        self.assertEqual(len(tokenized[0]['tokens']),32)
-        self.assertTrue(tokenized[0]['tokens'][0]['start_sent'])
-        self.assertTrue(tokenized[0]['tokens'][9]['start_sent'])
         self.assertEqual(tokenized[0]['tokens'][6]['text'],'formas')
         self.assertFalse(tokenized[0]['tokens'][6]['line_break_before'])
         self.assertEqual(tokenized[0]['tokens'][7]['text'],'corpora')
@@ -68,7 +53,6 @@ class ProcessorTest(TestCase):
         self.assertEqual(len(tokenized),20)
         self.assertEqual(len(tokenized[0]['tokens']),7)
         self.assertEqual(len(tokenized[19]['tokens']),9)
-        self.assertFalse(tokenized[0]['tokens'][0]['start_sent'])
         self.assertFalse(tokenized[0]['tokens'][-1]['line_break_before'])
         self.assertEqual(tokenized[1]['tokens'][0]['index'],0)
         self.assertEqual(tokenized[1]['tokens'][0]['docIndex'],8)
@@ -88,23 +72,12 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[3]['alpheios_data_cite'],'citation4')
         self.assertEqual(tokenized[3]['tokens'][0]['text'],'ad')
 
-    def test_tokenize_linesegsent(self):
-        text = self.readFixture(type='text', name='lineseg.csv')
-        processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True)
-        self.assertEqual(len(tokenized),20)
-        self.assertEqual(len(tokenized[0]['tokens']),7)
-        self.assertEqual(len(tokenized[19]['tokens']),9)
-        self.assertTrue(tokenized[0]['tokens'][0]['start_sent'])
-        self.assertTrue(tokenized[1]['tokens'][2]['start_sent'])
-
     def test_tokenize_linesegsenttbsent(self):
         text = self.readFixture(type='text', name='lineseg.csv')
         processor = Processor(config=None)
         tokenized = processor.tokenize(
             text=text,
             lang='lat',
-            sentencize=True,
             segmentOn='singleline',
             segmentStart=1,
             segmentMetadataTemplate=self.tbrequestmeta)
@@ -133,9 +106,8 @@ class ProcessorTest(TestCase):
     def test_tokenize_linesegcustomtb(self):
         text = self.readFixture(type='text', name='linesegtb.csv')
         processor = Processor(config=None)
-        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', sentencize=True, segmentStart=1)
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', segmentStart=1)
         self.assertEqual(len(tokenized),3)
-        self.assertTrue(tokenized[0]['alpheios_data_tb_sent'],'10')
         self.assertTrue(tokenized[0]['index'],1)
         self.assertEqual(tokenized[0]['tokens'][2]['text'],'fert')
         self.assertEqual(tokenized[0]['tokens'][2]['alpheios_data_tb_word'],'1')

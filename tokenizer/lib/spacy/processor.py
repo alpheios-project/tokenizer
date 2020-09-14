@@ -67,7 +67,7 @@ class Processor():
 
 
     def _new_segment(self, index=0, token=None, metadata=None):
-        segment = {'index':index, 'tokens':[] }
+        segment = {'index':index, 'tokens':[], 'metadata': {} }
         for extension in EXTENSIONS:
             if (
                 token is not None
@@ -126,8 +126,8 @@ class Processor():
                   'index': tokenIndex,
                   'docIndex': token.i,
                   'text': token.text,
-                  'is_punct': token.is_punct,
-                  'start_sent': token.is_sent_start if sentencize else False,
+                  'punct': token.is_punct,
+                  'metadata': {}
                 }
                 for extension in EXTENSIONS:
                     if extension['report']:

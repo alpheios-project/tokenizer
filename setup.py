@@ -15,6 +15,7 @@ setup(
         "apispec-webframeworks",
         "click",
         "flask==1.1.2",
+        "Flask-Babel",
         "Flask-Cache==0.13.1",
         "flask-cors==2.0.0",
         "flask-marshmallow",
