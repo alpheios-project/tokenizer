@@ -124,6 +124,9 @@ def tokenize_text():
     #TODO parse document level metadata
     meta = {}
 
+    print(request.data)
+    print(text)
+
     config = schema.load(request.args)
     segments = _call_tokenizer(text=text,config=config)
     resp_schema = TokenizeResponseSchema()

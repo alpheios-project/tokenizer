@@ -42,9 +42,9 @@ class TokenizerTestCase(TestCase):
         self.assertEqual(data['segments'][3]['tokens'][0]['text'],"Nam")
 
     def test_tokenize_text_defaults(self):
-        text = self.readFixture(type='text', name='singleseg.csv')
+        text = self.readFixture(type='text', name='lineseg.txt')
         rv = self.client.post('/tokenize/text?lang=en',data=text, headers={'Content-Type': 'text/plain'})
         data = json.loads(rv.get_data(as_text=True))
-        self.assertEqual(len(data['segments']),4)
+        self.assertEqual(len(data['segments']),20)
 
 
