@@ -10,7 +10,7 @@ RUN python -m spacy download en_core_web_sm
 COPY . /
 WORKDIR /
 
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["sh", "./run.sh"]
 
 
 

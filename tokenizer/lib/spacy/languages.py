@@ -1,7 +1,9 @@
-from tokenizer.lib.spacy.models.base import BaseModel
+from tokenizer.lib.spacy.models.base import Base
+from tokenizer.lib.spacy.models.latin import Latin
 
 MODEL = {
-    'default': BaseModel
+    'default': Base,
+    'lat': Latin
 }
 
 CODES = {
