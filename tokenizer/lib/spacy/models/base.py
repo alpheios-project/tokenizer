@@ -4,7 +4,7 @@ import re
 
 class BaseModel():
 
-    URL_MATCH = re.compile(r'''^urn:''')
+    URL_MATCH = re.compile(r'''^(CITE_)?(urn:)|(https?:\/\/)''')
 
     def load_model(self):
         nlp = spacy.load(self.model())

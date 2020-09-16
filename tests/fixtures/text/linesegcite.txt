@@ -1,4 +1,4 @@
-META|CITE_citation1 In nova fert animus mutatas dicere formas
-META|CITE_citation2 corpora. Di , coeptis (nam vos mutastis et illas)
-META|CITE_citation3 adspirate meis primaque ab origine mundi
+META|CITE_urn:cts:latinLit:phi0959.phi006.alpheios-text-lat1:1.1 In nova fert animus mutatas dicere formas
+META|CITE_http://citation2 corpora. Di , coeptis (nam vos mutastis et illas)
+META|CITE_https://citation3 adspirate meis primaque ab origine mundi
 META|CITE_citation4 ad mea perpetuum deducite tempora carmen.
