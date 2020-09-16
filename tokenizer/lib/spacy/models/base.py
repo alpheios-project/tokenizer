@@ -21,6 +21,9 @@ class Base():
         self._entities(nlp)
         return nlp
 
+    def retokenize(self,doc=None,config=None):
+        pass
+
     def _entities(self,nlp):
         # we add these individually after the tokenizer is constructed because
         # the xml entity match should apply to all languages but

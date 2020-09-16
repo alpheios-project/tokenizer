@@ -34,16 +34,50 @@ class TestLatin(TestCase):
         config[Latin.SPLIT_ENCLYTICS] = 1
         nlp = self.model.load_model(config=config)
         txt = 'M. Cicero pecūniam gaudĭămque incolīs dabit.'
-        doc = nlp(txt)
-        self.assertEqual(len(doc),9)
-
-        with doc.retokenize() as retokenizer:
-            for token in doc:
-                p = re.compile(r'que$')
-                match = p.match(token.text)
-                if match:
-                    retokenizer.merge(doc[token.i-1:token.i+1])
-        self.assertEqual(len(doc),8)
+        split = [
+          "laetusque",
+          "eoque",
+          "eamque",
+          "easque",
+          "neque",
+          "Neque",
+          "nec",
+          "Nec",
+          "altusque"
+        ]
+        no_split = [
+          "Atque",
+          "atque",
+          "cuiusque",
+          "denique",
+          "itaque",
+          "plerumque",
+          "plerosque",
+          "plerique",
+          "plerarumque",
+          "quaque",
+          "quemque",
+          "undique",
+          "uterque",
+          "utriusque",
+          "utcumque",
+          "usque",
+          "quantumcumque",
+          "quantulacumque",
+          "unusquisque",
+          "quisque",
+          "quaeque",
+          "uniuscuiusque",
+        ]
+        for example in split:
+            doc = nlp(example)
+            self.model.retokenize(doc=doc,config=config)
+            self.assertEqual(len(doc),2)
+        for example in no_split:
+            doc = nlp(example)
+            self.assertEqual(len(doc),2)
+            self.model.retokenize(doc=doc,config=config)
+            self.assertEqual(len(doc),1)
 
 
 
