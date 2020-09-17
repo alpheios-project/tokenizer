@@ -11,7 +11,7 @@ class Latin(Base):
     SPECIAL_CASES = {
     }
 
-    #TODO accented es
+    #TODO accented vowels
     SPECIAL_CASES_ENCLYTICS = dict(
         {
             'nec': [{"ORTH":"ne"},{"ORTH":"c"}],

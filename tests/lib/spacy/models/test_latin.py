@@ -29,6 +29,11 @@ class TestLatin(TestCase):
         doc = self.nlp(txt)
         self.assertEqual(len(doc),6)
 
+    def testAbbr(self):
+        txt = "M. Cicero et Marcus aimici sunt."
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),6)
+
     def testSplit(self):
         config = {}
         config[Latin.SPLIT_ENCLYTICS] = 1
