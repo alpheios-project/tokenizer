@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED 1
 
 COPY setup.py /
 RUN python /setup.py install
-RUN python -m spacy download en_core_web_sm
+RUN python -m spacy download xx_ent_wiki_sm
 
 COPY . /
 WORKDIR /
