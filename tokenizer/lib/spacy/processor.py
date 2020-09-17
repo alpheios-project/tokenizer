@@ -4,7 +4,7 @@ import re
 import sys
 from marshmallow import Schema, fields
 from tokenizer.lib.meta.parser import Parser
-from tokenizer.lib.spacy.languages import Languages
+from tokenizer.lib.spacy.models.default import Default
 
 # extensions to the Spacy Token API for processing segment and line information
 EXTENSIONS = [
@@ -55,7 +55,7 @@ class Processor():
         :type config: dict
         """
         self.metaParser = Parser()
-        self.languages = Languages()
+        self.model = Default()
 
     def _load_model(self, lang=None):
         """ private method to load the correct tokenizer model for the language
@@ -65,7 +65,7 @@ class Processor():
             :type lang: string
         """
 
-        nlp = self.languages.model(lang)
+        nlp = self.model.load_model(lang=lang,config={})
 
         # TODO we should get the max length from the app configuration
         # need to find out if this can be unlimited

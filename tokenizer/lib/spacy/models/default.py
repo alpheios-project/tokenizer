@@ -1,0 +1,60 @@
+import spacy
+from spacy.tokenizer import Tokenizer
+from tokenizer.lib.spacy.languages.mapper import Mapper
+import re
+
+class Default():
+
+    URL_MATCH = re.compile(r'''^(CITE_)?(urn:)|(https?:\/\/)''')
+    SPECIAL_CASES = {}
+
+    ENTITIES = [
+      "&apos;",
+      "&quot;",
+      "&amp;",
+      "&gt;",
+      "&lt;"
+    ]
+
+    def __init__(self):
+        """ Constructor """
+        self.mapper = Mapper()
+
+    def load_model(self,lang=None,config=None):
+        """ loads and configures the spacy language model
+
+            :param lang: the language of the text
+            :type: string
+            :param config: optional dict of config options
+            :type: dict
+
+            :return: the spacy language model
+            :rtype: spacy.language.Language
+        """
+        nlp = self._model(lang)
+        self._tokenizer(nlp=nlp,config=config)
+        self._entities(nlp)
+        return nlp
+
+    def _entities(self,nlp):
+        """ adds additional entities applicable to all languages """
+        # we add these individually after the tokenizer is constructed because
+        # the xml entity match should apply to all languages but
+        # not override any other special cases for the language that were
+        # added in the language model
+        for entity in Default.ENTITIES:
+            nlp.tokenizer.add_special_case(entity, [{"ORTH":entity}])
+
+    def _model(self,lang):
+        """ loads the right model for the language """
+        language = self.mapper.get_language(lang)
+        if language:
+            return language()
+        else:
+            return spacy.load("xx_ent_wiki_sm")
+
+    def _tokenizer(self,nlp=None,config=None):
+        """ adds tokenizer overrides that apply to all languages """
+        nlp.tokenizer.url_match = Default.URL_MATCH.match
+
+
