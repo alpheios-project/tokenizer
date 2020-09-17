@@ -3,14 +3,15 @@ from __future__ import unicode_literals
 
 #from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS, TOKEN_MATCH
 #from .punctuation import TOKENIZER_PREFIXES, TOKENIZER_INFIXES
-#from .punctuation import TOKENIZER_SUFFIXES
 
+from .punctuation import TOKENIZER_SUFFIXES
+from .tokenizer_exceptions import TOKEN_MATCH
 
-from spacy.lang.punctuation import TOKENIZER_PREFIXES, TOKENIZER_INFIXES, TOKENIZER_SUFFIXES
+from spacy.lang.punctuation import TOKENIZER_PREFIXES, TOKENIZER_INFIXES
 from spacy.lang.tag_map import TAG_MAP
 from spacy.lang.lex_attrs import LEX_ATTRS
 
-from spacy.lang.tokenizer_exceptions import BASE_EXCEPTIONS, TOKEN_MATCH, URL_MATCH
+from spacy.lang.tokenizer_exceptions import BASE_EXCEPTIONS, URL_MATCH
 from spacy.lang.norm_exceptions import BASE_NORMS
 from spacy.language import Language
 from spacy.lookups import Lookups
