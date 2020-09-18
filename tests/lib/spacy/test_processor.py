@@ -38,7 +38,7 @@ class ProcessorTest(TestCase):
         processor = Processor(config=None)
         tokenized = processor.tokenize(text=text, lang='lat')
         self.assertEqual(len(tokenized),1)
-        self.assertEqual(len(tokenized[0]['tokens']),32)
+        self.assertEqual(len(tokenized[0]['tokens']),33)
         self.assertEqual(tokenized[0]['tokens'][0]['index'],0)
         self.assertEqual(tokenized[0]['tokens'][0]['docIndex'],0)
         self.assertEqual(tokenized[0]['tokens'][6]['text'],'formas')
