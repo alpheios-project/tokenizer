@@ -51,7 +51,7 @@ class Default():
         if language:
             return language()
         else:
-            return spacy.load("xx_ent_wiki_sm")
+            raise(f"Unable to load Language class for {lang}")
 
     def _tokenizer(self,nlp=None,config=None):
         """ adds tokenizer overrides that apply to all languages """
