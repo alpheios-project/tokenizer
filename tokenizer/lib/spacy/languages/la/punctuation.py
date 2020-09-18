@@ -3,7 +3,6 @@ from spacy.lang.char_classes import LIST_PUNCT, LIST_ELLIPSES, LIST_QUOTES, CURR
 from spacy.lang.char_classes import CONCAT_QUOTES, UNITS, ALPHA, ALPHA_LOWER, ALPHA_UPPER, group_chars, LATIN_LOWER
 from .normalizations import N_A, N_a, N_E, N_e, N_O, N_o, N_I, N_i, N_u, N_U, N_AE, N_ae, N_OE, N_oe
 
-#MIDDLE_PUNCTUATION_RE = re.compile(r'''[\u2010\u2012\u2013\u2014\u2015]''')
 
 ENCLYTICS = [
     r"(?<=^[Nn][{e}])c".format(e=group_chars(N_e)),
