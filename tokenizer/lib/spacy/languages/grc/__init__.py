@@ -1,6 +1,8 @@
 # coding: utf8
 from __future__ import unicode_literals
 
+#from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS, TOKEN_MATCH
+
 from .punctuation import TOKENIZER_SUFFIXES, TOKENIZER_INFIXES, TOKENIZER_PREFIXES
 from .tokenizer_exceptions import TOKEN_MATCH
 
@@ -22,7 +24,8 @@ class LatinDefaults(Language.Defaults):
     lex_attr_getters[NORM] = add_lookups(
         Language.Defaults.lex_attr_getters[NORM], BASE_NORMS
     )
-    tokenizer_exceptions = BASE_EXCEPTIONS
+    #tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
+    tokenizer_exceptions = update_exc(BASE_EXCEPTIONS)
     prefixes = TOKENIZER_PREFIXES
     infixes = TOKENIZER_INFIXES
     suffixes = TOKENIZER_SUFFIXES
