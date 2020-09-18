@@ -1,8 +1,6 @@
 # coding: utf8
 from __future__ import unicode_literals
 
-#from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS, TOKEN_MATCH
-
 from .punctuation import TOKENIZER_SUFFIXES, TOKENIZER_INFIXES, TOKENIZER_PREFIXES
 from .tokenizer_exceptions import TOKEN_MATCH
 
@@ -17,25 +15,22 @@ from spacy.attrs import LANG, NORM
 from spacy.util import update_exc, add_lookups
 
 
-class LatinDefaults(Language.Defaults):
+class AncientGreekDefaults(Language.Defaults):
     lex_attr_getters = dict(Language.Defaults.lex_attr_getters)
     lex_attr_getters.update(LEX_ATTRS)
-    lex_attr_getters[LANG] = lambda text: "la"
+    lex_attr_getters[LANG] = lambda text: "grc"
     lex_attr_getters[NORM] = add_lookups(
         Language.Defaults.lex_attr_getters[NORM], BASE_NORMS
     )
-    #tokenizer_exceptions = update_exc(BASE_EXCEPTIONS, TOKENIZER_EXCEPTIONS)
-    tokenizer_exceptions = update_exc(BASE_EXCEPTIONS)
+    tokenizer_exceptions = BASE_EXCEPTIONS
     prefixes = TOKENIZER_PREFIXES
     infixes = TOKENIZER_INFIXES
     suffixes = TOKENIZER_SUFFIXES
-    token_match = TOKEN_MATCH
-    syntax_iterators = {}
 
 
-class Latin(Language):
-    lang = "la"
-    Defaults = LatinDefaults
+class AncientGreek(Language):
+    lang = "grc"
+    Defaults = AncientGreekDefaults
 
 
-__all__ = ["Latin"]
+__all__ = ["AncientGreek"]

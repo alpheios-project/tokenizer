@@ -43,3 +43,8 @@ class TestDefault(TestCase):
         doc = self.nlp(txt)
         self.assertEqual(len(doc),8)
 
+    def testGreek(self):
+        txt = "καὶ διὰ τῆς περὶ τὴν ἀρχαιολογίαν συγγραφῆς."
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),8)
+

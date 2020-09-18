@@ -17,6 +17,7 @@ LANGUAGE = {
     'fi': { "name": "Finnish" },
     'fr': { "name": "French" },
     'ga': { "name": "Irish" },
+    'grc': { "path": "tokenizer.lib.spacy.languages.grc", "name": "AncientGreek"},
     'gu': { "name": "Gujarati" },
     'he': { "name": "Hebrew" },
     'hi': { "name": "Hindi" },
