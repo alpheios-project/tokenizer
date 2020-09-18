@@ -2,12 +2,10 @@
 from __future__ import unicode_literals
 
 #from .tokenizer_exceptions import TOKENIZER_EXCEPTIONS, TOKEN_MATCH
-#from .punctuation import TOKENIZER_PREFIXES, TOKENIZER_INFIXES
 
-from .punctuation import TOKENIZER_SUFFIXES
+from .punctuation import TOKENIZER_SUFFIXES, TOKENIZER_INFIXES, TOKENIZER_PREFIXES
 from .tokenizer_exceptions import TOKEN_MATCH
 
-from spacy.lang.punctuation import TOKENIZER_PREFIXES, TOKENIZER_INFIXES
 from spacy.lang.tag_map import TAG_MAP
 from spacy.lang.lex_attrs import LEX_ATTRS
 

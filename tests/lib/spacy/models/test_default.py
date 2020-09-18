@@ -15,7 +15,31 @@ class TestDefault(TestCase):
 
     def testPeriod(self):
         doc = self.nlp("C. Caesar Antoniusque ratione superavit.")
+        self.assertEqual(doc[0].text,"C.")
         self.assertEqual(len(doc),6)
 
+    def testEntities(self):
+        txt = "&amp; &quot; &apos; &gt; &lt; ;"
+        doc = self.nlp(txt)
 
+    def testDoubleHyphen(self):
+        txt = 'Arma -- virum -- cano.'
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),6)
+
+    def testDoublePunc(self):
+        txt = 'Arma cano!?'
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),4)
+
+    def testDirectSpeech(self):
+        txt = "'Arma', inquit 'cano'."
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),9)
+        txt = '"Arma" inquit "cano".'
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),8)
+        txt = '”Arma” inquit ”cano”.'
+        doc = self.nlp(txt)
+        self.assertEqual(len(doc),8)
 
