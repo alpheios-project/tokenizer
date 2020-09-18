@@ -139,6 +139,7 @@ class Mapper():
         """
         lang = self.map_code(lang)
         if lang not in LANGUAGE:
+            # use the MultiLanguage class if we don't have the right one
             lang = 'xx'
         load_info = LANGUAGE[lang]
         try:
