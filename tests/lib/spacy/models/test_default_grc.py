@@ -5,6 +5,7 @@ import re
 
 
 class TestDefault(TestCase):
+    """ Tests for default model with Ancient Greek Language """
 
     def setUp(self):
         model = Default()

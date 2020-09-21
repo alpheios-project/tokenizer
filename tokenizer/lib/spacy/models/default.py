@@ -4,6 +4,12 @@ from tokenizer.lib.spacy.lang.mapper import Mapper
 import re
 
 class Default():
+    """ The Default Model is one which uses the Spacy Language class
+        for tokenization, with non-language-specific overrides for
+        URL_MATCH and XML ENTITIES. This class can be subclassed if alternate
+        tokenization models are needed (e.g. to include configurable options, to
+        include retokenization, etc. )
+    """
 
     URL_MATCH = re.compile(r'''^(CITE_)?(urn:)|(https?:\/\/)''')
     SPECIAL_CASES = {}
