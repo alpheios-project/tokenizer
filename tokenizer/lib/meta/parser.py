@@ -1,4 +1,5 @@
 import re
+import sys
 
 class Parser():
     """ Parses Alpheios Metadata from Text """
@@ -50,12 +51,12 @@ class Parser():
         r_meta = re.compile(r'^(META\|\S+)')
         matched = r_meta.match(line)
         if matched:
-            metadata = self.parseToken(matched.group(0))
+            metadata = self.parseToken(matched.group(1))
             if replace:
                 line = re.sub(r'^META\|\S+\s+','',line)
         matched_extra = r_meta.match(extra)
         if matched_extra:
-            extra_meta = self.parseToken(matched_extra.group(0))
+            extra_meta = self.parseToken(matched_extra.group(1))
             for item in extra_meta:
                 metadata[item] = extra_meta[item]
         return metadata, line

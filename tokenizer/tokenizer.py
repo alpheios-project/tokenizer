@@ -154,7 +154,14 @@ def _call_tokenizer(text=None, config=None):
         tokens = []
         for token in segment['tokens']:
             tokens.append(tokenSchema.dump(token))
-        segs.append(segmentsSchema.dump({'tokens': tokens, 'index':segment['index'], 'metadata':segment['metadata']}))
+        segdata = {
+            'tokens': tokens,
+            'index':segment['index']
+        }
+        for metadata in ('alpheios_data_tb_sent', 'alpheios_data_cite'):
+            if metadata in segment:
+                segdata[metadata] = segment[metadata]
+        segs.append(segmentsSchema.dump(segdata))
     return segs
 
 ## Add tokenize_tei operation to the OpenApi doc

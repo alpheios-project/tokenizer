@@ -107,7 +107,7 @@ class Processor():
             :return: the segment object
             :rtype: dict
         """
-        segment = {'index':index, 'tokens':[], 'metadata': {} }
+        segment = {'index':index, 'tokens':[] }
         for extension in EXTENSIONS:
             if (
                 token is not None
@@ -189,8 +189,7 @@ class Processor():
                   'index': tokenIndex,
                   'docIndex': token.i,
                   'text': token.text,
-                  'punct': token.is_punct,
-                  'metadata': {}
+                  'punct': token.is_punct
                 }
                 for extension in EXTENSIONS:
                     if extension['report']:
