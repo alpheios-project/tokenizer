@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  api:
+    build: .
+    command: python manage.py run -h 0.0.0.0
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.dev
