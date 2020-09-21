@@ -1,6 +1,6 @@
 import spacy
 from spacy.tokenizer import Tokenizer
-from tokenizer.lib.spacy.languages.mapper import Mapper
+from tokenizer.lib.spacy.lang.mapper import Mapper
 import re
 
 class Default():
