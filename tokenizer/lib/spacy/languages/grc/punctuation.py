@@ -38,13 +38,13 @@ _suffixes = (
     + DASHES # removed apostrophe s
     + [
         r"(?<=[0-9])\+",
-        r"(?<=°[FfCcKk])\.",
+        r"(?<=°[FfCcKk])\.", # this and the following are unlikely to appear in greek text but no harm in keeping
         r"(?<=[0-9])(?:{c})".format(c=CURRENCY),
         r"(?<=[0-9])(?:{u})".format(u=UNITS),
         r"(?<=[0-9{al}{e}{p}(?:{q})])\.".format(
             al=ALPHA_LOWER, e=r"%²\-\+", q=CONCAT_QUOTES, p=PUNCT
         ),
-        r"(?<=[{au}][{au}])\.".format(au=ALPHA),
+        r"(?<=[{au}][{au}])\.".format(au=ALPHA), # keeping all alpha here to cover strange encoding cases
     ]
 )
 
