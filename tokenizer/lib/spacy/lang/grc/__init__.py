@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from .punctuation import TOKENIZER_SUFFIXES, TOKENIZER_INFIXES, TOKENIZER_PREFIXES
-from .tokenizer_exceptions import TOKEN_MATCH
 
 from spacy.lang.tag_map import TAG_MAP
 from spacy.lang.lex_attrs import LEX_ATTRS
