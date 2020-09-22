@@ -4,6 +4,7 @@ import re
 import sys
 from marshmallow import Schema, fields
 from tokenizer.lib.meta.parser import Parser
+from tokenizer.lib.spacy.models.default import Default
 
 # extensions to the Spacy Token API for processing segment and line information
 EXTENSIONS = [
@@ -54,6 +55,7 @@ class Processor():
         :type config: dict
         """
         self.metaParser = Parser()
+        self.model = Default()
 
     def _load_model(self, lang=None):
         """ private method to load the correct tokenizer model for the language
@@ -63,15 +65,23 @@ class Processor():
             :type lang: string
         """
 
-        #TODO language-specific handling still needs to be implemented,
-        # this just uses the base english model
-        nlp = spacy.load("en_core_web_sm")
+        nlp = self.model.load_model(lang=lang,config={})
 
         # TODO we should get the max length from the app configuration
         # need to find out if this can be unlimited
         nlp.max_length = 4000000
 
         return nlp
+
+    def _custom_tokenizer(self,nlp=None,lang=None):
+         return Tokenizer(
+            nlp.vocab,
+            rules=self.rules.special_cases(lang),
+            prefix_search=self.rules.prefix(lang),
+            suffix_search=self.rules.suffix(lang),
+            infix_finditer=self.rules.infix(lang),
+            url_match=self.rules.url_match(lang)
+        )
 
     def _add_sentencizer(self, nlp=None, lang=None):
         """ private method to add a sentencizer to the pipeline
@@ -97,7 +107,7 @@ class Processor():
             :return: the segment object
             :rtype: dict
         """
-        segment = {'index':index, 'tokens':[], 'metadata': {} }
+        segment = {'index':index, 'tokens':[] }
         for extension in EXTENSIONS:
             if (
                 token is not None
@@ -179,8 +189,7 @@ class Processor():
                   'index': tokenIndex,
                   'docIndex': token.i,
                   'text': token.text,
-                  'punct': token.is_punct,
-                  'metadata': {}
+                  'punct': token.is_punct
                 }
                 for extension in EXTENSIONS:
                     if extension['report']:

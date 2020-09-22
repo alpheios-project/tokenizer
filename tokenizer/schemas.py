@@ -22,6 +22,12 @@ class TokenizeTeiRequestSchema(Schema):
         required=True,
         description=gettext("Language code of text to be tokenized.")
     )
+    direction = fields.Str(
+        required=False,
+        description=gettext("Text direction."),
+        missing = "ltr",
+        validate = validate.OneOf(["ltr","rtl"])
+    )
     tbseg = fields.Boolean(
         required=False,
         missing=False,
@@ -43,6 +49,12 @@ class TokenizeTextRequestSchema(Schema):
     lang = fields.Str(
         required=True,
         description=gettext("Language code of text to be tokenized.")
+    )
+    direction = fields.Str(
+        required=False,
+        description=gettext("Text direction."),
+        missing = "ltr",
+        validate = validate.OneOf(["ltr","rtl"])
     )
     tbseg = fields.Boolean(
         required=False,
