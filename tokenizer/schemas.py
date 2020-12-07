@@ -42,9 +42,9 @@ class TokenizeTeiRequestSchema(Schema):
 class TokenizeTextRequestSchema(Schema):
     segments = fields.Str(
         required=False,
-        missing="singleline",
+        missing="doubleline",
         description=gettext("Segment indicator."),
-        validate=validate.OneOf(["singleline","doubline"])
+        validate=validate.OneOf(["singleline","doubleline"])
     )
     lang = fields.Str(
         required=True,
