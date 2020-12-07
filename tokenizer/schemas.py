@@ -36,7 +36,7 @@ class TokenizeTeiRequestSchema(Schema):
     segstart = fields.Integer(
         required=False,
         missing=1,
-        description=gettext("Defines the starting segment index.")
+        description=gettext("Supply the starting segment index.")
     )
 
 class TokenizeTextRequestSchema(Schema):
@@ -64,7 +64,7 @@ class TokenizeTextRequestSchema(Schema):
     segstart = fields.Integer(
         required=False,
         missing=0,
-        description=gettext("Defines the starting segment index.")
+        description=gettext("Supply the starting segment index.")
     )
 
 class TokenSchema(Schema):
