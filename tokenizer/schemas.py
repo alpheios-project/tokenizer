@@ -6,65 +6,65 @@ class TokenizeTeiRequestSchema(Schema):
     segments = fields.Str(
         required=False,
         missing=Parser.DEFAULT_SEGMENT_ELEMS,
-        description=gettext("Comma-separated list of elements which identify segments."),
+        description=gettext("Supply a comma-separated list of TEI elements in the text which group segments of tokens."),
     )
     ignore= fields.Str(
         required=False,
         missing=Parser.DEFAULT_IGNORE_ELEMS,
-        description=gettext("Comma-separated list of elements whose contents should be ignored.")
+        description=gettext("Supply a comma-separated list of TEI elements in the text whose contents should be ignored for tokenization.")
     )
     linebreaks = fields.Str(
         required=False,
         missing=Parser.DEFAULT_LINEBREAK_ELEMS,
-        description=gettext("Comma-separated list of elements to line-break after for display."),
+        description=gettext("Supply a comma-separated list of elements in the text that represent visual blocks."),
     )
     lang = fields.Str(
         required=True,
-        description=gettext("Language code of text to be tokenized.")
+        description=gettext("Supply the iso language code of the text.")
     )
     direction = fields.Str(
         required=False,
-        description=gettext("Text direction."),
+        description=gettext("Supply the display direction of the text."),
         missing = "ltr",
         validate = validate.OneOf(["ltr","rtl"])
     )
     tbseg = fields.Boolean(
         required=False,
         missing=False,
-        description=gettext("True means 'alpheios_data_tb_sent' metadata to be set from segment index")
+        description=gettext("Use this if the segments in this text are aligned with a treebank.")
     )
     segstart = fields.Integer(
         required=False,
-        missing=0,
-        description=gettext("Starting segment index.")
+        missing=1,
+        description=gettext("Supply the starting segment index.")
     )
 
 class TokenizeTextRequestSchema(Schema):
     segments = fields.Str(
         required=False,
-        missing="singleline",
-        description=gettext("Segment indicator."),
-        validate=validate.OneOf(["singleline","doubline"])
+        missing="doubleline",
+        description=gettext("Identify how segments are separated in the text."),
+        validate=validate.OneOf(["singleline","doubleline"])
     )
     lang = fields.Str(
         required=True,
-        description=gettext("Language code of text to be tokenized.")
+        description=gettext("Supply the iso language code of the text.")
     )
     direction = fields.Str(
         required=False,
-        description=gettext("Text direction."),
+        description=gettext("Supply the display direction of the text."),
         missing = "ltr",
         validate = validate.OneOf(["ltr","rtl"])
     )
     tbseg = fields.Boolean(
         required=False,
         missing=False,
-        description=gettext("True means 'alpheios_data_tb_sent' metadata to be set from segment index.")
+        description=gettext("Use this if the segments in this text are aligned with a treebank.")
     )
     segstart = fields.Integer(
         required=False,
         missing=0,
-        description=gettext("Starting segment index.")
+        description=gettext("Supply the starting segment index.")
     )
 
 class TokenSchema(Schema):

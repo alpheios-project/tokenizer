@@ -45,6 +45,13 @@ class TokenizerTestCase(TestCase):
         text = self.readFixture(type='text', name='lineseg.txt')
         rv = self.client.post('/tokenize/text?lang=en',data=text, headers={'Content-Type': 'text/plain'})
         data = json.loads(rv.get_data(as_text=True))
-        self.assertEqual(len(data['segments']),20)
+        self.assertEqual(len(data['segments']),1)
+
+    def test_tokenize_text_segdoubleline(self):
+        text = self.readFixture(type='text', name='doublelineseg.txt')
+        rv = self.client.post('/tokenize/text?lang=en&segments=doubleline',data=text, headers={'Content-Type': 'text/plain'})
+        data = json.loads(rv.get_data(as_text=True))
+        self.assertEqual(len(data['segments']),2)
+
 
 
