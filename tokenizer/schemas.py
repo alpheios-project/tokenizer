@@ -31,7 +31,7 @@ class TokenizeTeiRequestSchema(Schema):
     tbseg = fields.Boolean(
         required=False,
         missing=False,
-        description=gettext("Use this if the segments in this text are aligned with a treebank.")
+        description=gettext("Is this text aligned with a treebank?")
     )
     segstart = fields.Integer(
         required=False,
@@ -59,11 +59,11 @@ class TokenizeTextRequestSchema(Schema):
     tbseg = fields.Boolean(
         required=False,
         missing=False,
-        description=gettext("Use this if the segments in this text are aligned with a treebank.")
+        description=gettext("Is this text aligned with a treebank?")
     )
     segstart = fields.Integer(
         required=False,
-        missing=0,
+        missing=1,
         description=gettext("Supply the starting segment index.")
     )
 
