@@ -1,0 +1,41 @@
+
+<GetPassage xmlns="http://chs.harvard.edu/xmlns/cts">
+	<request>
+		<requestName>GetPassage</requestName>
+		<requestUrn>urn:cts:latinLit:phi0448.phi002.perseus-lat2:1.1.1-1.1.4</requestUrn>
+	</request>
+	<reply>
+		<urn>urn:cts:latinLit:phi0448.phi002.perseus-lat2:1.1.1-1.1.4</urn>
+		<passage>
+			<TEI xmlns="http://www.tei-c.org/ns/1.0">
+				<teiHeader>
+					<fileDesc>
+						<titleStmt>
+							<title type="work" n="Gal.">De bello Gallico</title>
+						</titleStmt>
+						<publicationStmt>
+							<ab/>
+						</publicationStmt>
+						<sourceDesc>
+							<ab></ab>
+						</sourceDesc>
+					</fileDesc>
+				</teiHeader>
+        <ab>This text should not appear</ab>
+				<text>
+					<body>
+						<div type="edition" xml:lang="lat" n="urn:cts:latinLit:phi0448.phi001.perseus-lat2">
+							<div n="1" type="textpart" subtype="book">
+								<div type="textpart" subtype="chapter" n="1">
+									<div type="textpart" subtype="section" n="1">
+										<p>Gallia est omnis divisa</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</body>
+				</text>
+			</TEI>
+		</passage>
+	</reply>
+</GetPassage>
