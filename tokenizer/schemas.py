@@ -28,15 +28,9 @@ class TokenizeTeiRequestSchema(Schema):
         missing = "ltr",
         validate = validate.OneOf(["ltr","rtl"])
     )
-    tbseg = fields.Boolean(
+    tbsegstart = fields.Integer(
         required=False,
-        missing=False,
-        description=gettext("Is this text aligned with a treebank?")
-    )
-    segstart = fields.Integer(
-        required=False,
-        missing=1,
-        description=gettext("Supply the starting segment index.")
+        description=gettext("If this text is aligned with a treebank, specify the starting segment index")
     )
 
 class TokenizeTextRequestSchema(Schema):
@@ -56,15 +50,9 @@ class TokenizeTextRequestSchema(Schema):
         missing = "ltr",
         validate = validate.OneOf(["ltr","rtl"])
     )
-    tbseg = fields.Boolean(
+    tbsegstart = fields.Integer(
         required=False,
-        missing=False,
-        description=gettext("Is this text aligned with a treebank?")
-    )
-    segstart = fields.Integer(
-        required=False,
-        missing=1,
-        description=gettext("Supply the starting segment index.")
+        description=gettext("If this text is aligned with a treebank, specify the starting segment index")
     )
 
 class TokenSchema(Schema):

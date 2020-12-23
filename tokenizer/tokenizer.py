@@ -138,13 +138,13 @@ def _call_tokenizer(text=None, config=None):
         :return: segmented token
         :rtype: SegmentSchema[]
     """
-    segmentMetadataTemplate = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}' if config['tbseg'] else ""
+    segmentMetadataTemplate = 'META|TB_SENT_{ALPHEIOS_SEGMENT_INDEX}' if 'tbsegstart' in config else ""
     processor = Processor()
     segments = processor.tokenize(
         text=text,
         lang=config['lang'],
         segmentOn=config['segments'],
-        segmentStart=config['segstart'],
+        segmentStart= config['tbsegstart'] if 'tbsegstart' in config else 1,
         segmentMetadataTemplate=segmentMetadataTemplate
     )
     segmentsSchema = SegmentSchema()
