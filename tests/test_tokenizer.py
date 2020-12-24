@@ -88,5 +88,13 @@ class TokenizerTestCase(TestCase):
         self.assertEqual(data['segments'][1]['index'],1)
         self.assertEqual(data['segments'][1]['alpheios_data_tb_sent'],'1')
 
+    def test_tokenize_tei_invalidxml(self):
+        text = self.readFixture(type='tei', name='invalid.xml')
+        rv = self.client.post('/tokenize/tei?lang=en',data=text, headers={'Content-Type': 'application/xml'})
+        self.assertEqual(rv.status_code, 400)
+        data = json.loads(rv.get_data(as_text = True))
+        self.assertIn("Opening and ending tag mismatch",data['message'])
+
+
 
 

@@ -1,11 +1,11 @@
 # coding=utf8
-from flask import Flask,abort,make_response,request
+from flask import Flask,make_response,request
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask_babel import Babel, gettext
 from tokenizer.lib.spacy.processor import Processor
-from tokenizer.lib.tei.parser import Parser
-from tokenizer.schemas import TokenizeTeiRequestSchema, TokenizeTextRequestSchema, TokenizeResponseSchema, SegmentSchema, TokenSchema
+from tokenizer.lib.tei.parser import Parser, InvalidContentError, ParserError
+from tokenizer.schemas import TokenizeTeiRequestSchema, TokenizeTextRequestSchema, TokenizeResponseSchema, SegmentSchema, TokenSchema, TokenizeErrorSchema
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
@@ -50,7 +50,11 @@ def get_locale():
 def api():
     """ Base endpoint - returns the OpenAPI schema for the service
     """
-    return(json.dumps(spec.to_dict(),indent=2))
+    if request.accept_mimetypes['text/html'] or 'application/json' not in request.accept_mimetypes:
+        return(json.dumps(spec.to_dict(),indent=2))
+    else:
+        return(spec.to_dict())
+
 
 @app.route('/tokenize/tei', methods=['POST'])
 def tokenize_tei():
@@ -63,32 +67,42 @@ def tokenize_tei():
           schema: TokenizeTeiRequestSchema
       responses:
         201:
+          description: tokenized text
           content:
             application/json:
               schema: TokenizeResponseSchema
+        400:
+          description: invalid request
+          content:
+            application/json:
+              schema: TokenizeErrorSchema
     """
     # TODO parse per content-type header
     # this is just plain text
 
     if (request.content_type != 'application/xml'):
-        abort(400,"Unsupported content-type")
+        return _make_error(400,"Unsupported content-type")
 
     schema = TokenizeTeiRequestSchema()
     text = request.data.decode(encoding="utf-8")
     errors = schema.validate(request.args)
     if errors:
-        abort(400,str(errors))
+        return _make_error(400,str(errors))
 
     meta = {}
     config = schema.load(request.args)
     # TODO we should maybe report an error if the lang of the text
     # differs from what was sent in the request arg
     parser = Parser(config=None)
-    text = parser.parse_text(text,
-        segmentElems=config['segments'],
-        ignoreElems=config['ignore'],
-        linebreakElems=config['linebreaks'])
-    meta = parser.parse_meta(text)
+    try:
+        text = parser.parse_text(text,
+            segmentElems=config['segments'],
+            ignoreElems=config['ignore'],
+            linebreakElems=config['linebreaks'])
+        meta = parser.parse_meta(text)
+    except InvalidContentError as exc:
+        return _make_error(400,str(exc))
+
     # segments have been parsed from xml element to doubleline
     config['segments'] = 'doubleline'
     segments = _call_tokenizer(text=text,config=config)
@@ -107,19 +121,25 @@ def tokenize_text():
           schema: TokenizeTextRequestSchema
       responses:
         201:
+          description: tokenized text
           content:
             application/json:
               schema: TokenizeResponseSchema
+        400:
+          description: invalid request
+          content:
+            application/json:
+              schema: TokenizeErrorSchema
     """
 
     if (request.content_type != 'text/plain'):
-        abort(400,f"Unsupported content-type {request.content_type}")
+        return _make_error(400,f"Unsupported content-type {request.content_type}")
 
     schema = TokenizeTextRequestSchema()
     text = request.data.decode(encoding="utf-8")
     errors = schema.validate(request.args)
     if errors:
-        abort(400,str(errors))
+        _make_error(400,str(errors))
 
     #TODO parse document level metadata
     meta = {}
@@ -163,6 +183,14 @@ def _call_tokenizer(text=None, config=None):
                 segdata[metadata] = segment[metadata]
         segs.append(segmentsSchema.dump(segdata))
     return segs
+
+def _make_error(status_code, message):
+    errorSchema = TokenizeErrorSchema()
+    response = {
+        'status': status_code,
+        'message': message
+    }
+    return errorSchema.dump(response), status_code
 
 ## Add tokenize_tei operation to the OpenApi doc
 with app.test_request_context():
