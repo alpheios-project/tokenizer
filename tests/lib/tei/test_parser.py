@@ -60,5 +60,11 @@ class ParserTest(TestCase):
         parsed = parser.parse_text(tei=text,ignoreElems="none")
         self.assertEqual(parsed,expected)
 
+    def test_parseonlytext(self):
+        parser = Parser(config=None)
+        text = self.readFixture(type='tei', name='withheadertext.xml')
+        parsed = parser.parse_text(tei=text)
+        self.assertEqual(parsed,"Gallia est omnis divisa \n\n")
+
 if __name__ == '__main__':
   unittest.main()

@@ -63,7 +63,7 @@ class Parser():
         segmentOn = etree.XSLT.strparam(segmentList)
         ignore = etree.XSLT.strparam(ignoreList)
         linebreakOn = etree.XSLT.strparam(linebreakList)
-        text = self.text_xslt_transformer(etree.fromstring(tei),
+        text = self.text_xslt_transformer(etree.fromstring(tei.encode()),
             e_segmentOn = segmentOn,
             e_linebreakOn = linebreakOn,
             e_ignore = ignore,
