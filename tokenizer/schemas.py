@@ -115,4 +115,13 @@ class TokenizeResponseSchema(Schema):
         description = gettext("Text-level metadata dictionary.")
     )
 
+class TokenizeErrorSchema(Schema):
+    message = fields.Str(
+        required = True,
+        description = gettext("Error message")
+    )
+    status = fields.Str(
+        required = True,
+        description = gettext("Status code")
+    )
 

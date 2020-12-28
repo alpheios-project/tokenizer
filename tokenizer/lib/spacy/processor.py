@@ -198,6 +198,20 @@ class Processor():
                 tokenIndex = tokenIndex + 1
         return segments
 
+    def _normalize(self,text=None):
+        """ normalize text prior to tokenization
+            :param text: the text to be tokenized
+            :type text string
+
+            :return: normalized text
+            :rtype: string
+        """
+        # normalize linebreaks to \n
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
+        p = re.compile(r'\n\n\n+',re.DOTALL)
+        text = p.sub('\n\n',text)
+        return text
+
     def tokenize(
         self,
         text=None,
@@ -224,7 +238,7 @@ class Processor():
             :return: results of tokenization and segmentation
             :rtype: list of segments, each containint a list of tokens
         """
-
+        text = self._normalize(text=text)
         nlp = self._load_model(lang)
         if (sentencize):
             self._add_sentencizer(nlp=nlp)

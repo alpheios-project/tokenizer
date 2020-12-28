@@ -63,11 +63,16 @@ class Parser():
         segmentOn = etree.XSLT.strparam(segmentList)
         ignore = etree.XSLT.strparam(ignoreList)
         linebreakOn = etree.XSLT.strparam(linebreakList)
-        text = self.text_xslt_transformer(etree.fromstring(tei.encode()),
-            e_segmentOn = segmentOn,
-            e_linebreakOn = linebreakOn,
-            e_ignore = ignore,
-        )
+        try:
+            text = self.text_xslt_transformer(etree.fromstring(tei.encode()),
+                e_segmentOn = segmentOn,
+                e_linebreakOn = linebreakOn,
+                e_ignore = ignore,
+                )
+        except etree.XMLSyntaxError as exc:
+            raise InvalidContentError(exc)
+        except Exception as exc:
+            raise ParserError from exc
         return self.clean_text(str(text))
 
     def clean_text(self,text):
@@ -88,3 +93,10 @@ class Parser():
         p = re.compile(r'^\s+',re.DOTALL)
         text = p.sub('',text)
         return text
+
+class ParserError(Exception):
+    pass
+
+class InvalidContentError(Exception):
+    pass
+

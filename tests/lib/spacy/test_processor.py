@@ -118,7 +118,30 @@ class ProcessorTest(TestCase):
         self.assertEqual(tokenized[2]['tokens'][0]['text'],'adspirate')
         self.assertEqual(tokenized[2]['tokens'][0]['alpheios_data_tb_word'],'1')
 
+    def test_tokenize_normalize_multi(self):
+        text = self.readFixture(type='text', name='multiline.txt')
+        processor = Processor(config=None)
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='doubleline', segmentStart=1)
+        self.assertEqual(len(tokenized),4)
+        self.assertEqual(tokenized[0]['tokens'][0]['text'],'In')
+        self.assertEqual(tokenized[1]['tokens'][0]['text'],'corpora')
+        self.assertEqual(tokenized[2]['tokens'][0]['text'],'adspirate')
+        self.assertEqual(tokenized[3]['tokens'][0]['text'],'ad')
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', segmentStart=1)
+        self.assertEqual(tokenized[0]['tokens'][0]['text'],'In')
+        self.assertEqual(tokenized[1]['tokens'][0]['text'],'corpora')
+        self.assertEqual(tokenized[2]['tokens'][0]['text'],'adspirate')
+        self.assertEqual(tokenized[3]['tokens'][0]['text'],'ad')
 
+    def test_tokenize_normalize_linebreak(self):
+        text = 'abc\ndef\r\nghi\rjkl\n'
+        processor = Processor(config=None)
+        tokenized = processor.tokenize(text=text, lang='lat', segmentOn='singleline', segmentStart=1)
+        self.assertEqual(len(tokenized),4)
+        self.assertEqual(tokenized[0]['tokens'][0]['text'],'abc')
+        self.assertEqual(tokenized[1]['tokens'][0]['text'],'def')
+        self.assertEqual(tokenized[2]['tokens'][0]['text'],'ghi')
+        self.assertEqual(tokenized[3]['tokens'][0]['text'],'jkl')
 
 if __name__ == '__main__':
   unittest.main()

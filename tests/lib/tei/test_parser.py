@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from tokenizer.lib.tei.parser import Parser
+from tokenizer.lib.tei.parser import Parser, InvalidContentError
 import os
 
 class ParserTest(TestCase):
@@ -65,6 +65,12 @@ class ParserTest(TestCase):
         text = self.readFixture(type='tei', name='withheadertext.xml')
         parsed = parser.parse_text(tei=text)
         self.assertEqual(parsed,"Gallia est omnis divisa \n\n")
+
+    def test_parsetext_invalid(self):
+        parser = Parser(config=None)
+        text = self.readFixture(type='tei', name='invalid.xml')
+        with self.assertRaises(InvalidContentError):
+            parsed = parser.parse_text(tei=text)
 
 if __name__ == '__main__':
   unittest.main()
