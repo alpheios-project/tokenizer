@@ -20,10 +20,12 @@ setup(
         "flask-cors==2.0.0",
         "flask-marshmallow",
         "gunicorn",
+        "jieba==0.42.1",
         "requests>=2.8.1",
         "requests-cache==0.4.9",
         "lxml<5.0.0",
         "marshmallow",
+        "pkuseg==0.0.25",
         "spacy==2.3.2",
     ],
     tests_require=[
