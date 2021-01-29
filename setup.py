@@ -14,6 +14,7 @@ setup(
         "apispec<4.0.0",
         "apispec-webframeworks",
         "click",
+        "Cython",
         "flask==1.1.2",
         "Flask-Babel",
         "Flask-Cache==0.13.1",
@@ -25,6 +26,8 @@ setup(
         "lxml<5.0.0",
         "marshmallow",
         "spacy==2.3.2",
+        "pkuseg==0.0.25"
+        
     ],
     tests_require=[
     ],
