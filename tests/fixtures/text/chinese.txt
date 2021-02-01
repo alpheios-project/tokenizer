@@ -12,3 +12,6 @@ jpn
 
 tha
 ข้อความทดสอบสำหรับโครงการของเรา
+
+vie
+Văn bản thử nghiệm cho dự án của chúng tôi

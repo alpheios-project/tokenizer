@@ -33,7 +33,8 @@ setup(
         "pymorphy2",
         "pythainlp",
         "setuptools",
-        "wheel"
+        "wheel",
+        "pyvi"
     ],
     tests_require=[
     ],
