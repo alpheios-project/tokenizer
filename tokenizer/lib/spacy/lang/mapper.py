@@ -124,7 +124,7 @@ CODES = {
     'ukr': 'uk',
     'urd': 'ur',
     'vie': 'vi',
-    'zhu': 'zh',
+    'zho': 'zh',
 }
 
 class Mapper():
