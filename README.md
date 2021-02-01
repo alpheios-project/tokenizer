@@ -7,7 +7,7 @@ To run development server with Docker:
 
 ```
 docker build -t tokenizer .
-docker run -p 5000:5000 tokenizer
+docker run -p 5000:5000 tokenizer:latest gunicorn --bind 0.0.0.0:5000 manage:app
 ```
 
 Example requests:

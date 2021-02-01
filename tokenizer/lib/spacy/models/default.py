@@ -49,7 +49,11 @@ class Default():
         # not override any other special cases for the language that were
         # added in the language model
         for entity in Default.ENTITIES:
-            nlp.tokenizer.add_special_case(entity, [{"ORTH":entity}])
+            try:
+                nlp.tokenizer.add_special_case(entity, [{"ORTH":entity}])
+            except:
+                # it seems that some tokenizers don't implement this (chinese eg)
+                pass
 
     def _model(self,lang):
         """ loads the right model for the language """
