@@ -31,6 +31,7 @@ setup(
         "pymorphy2-dicts-ru",
         "pymorphy2-dicts-uk",
         "pymorphy2",
+        "pythainlp",
         "setuptools",
         "wheel"
     ],
