@@ -27,6 +27,7 @@ setup(
         "marshmallow",
         "pkuseg==0.0.25",
         "spacy==2.3.2",
+        "pymorphy2"
     ],
     tests_require=[
     ],
