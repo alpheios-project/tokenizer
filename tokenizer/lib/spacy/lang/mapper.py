@@ -57,7 +57,7 @@ LANGUAGE = {
     'tl': { "name": "Tagalog" },
     'tr': { "name": "Turkish" },
     'tt': { "name": "Tatar" },
-    'uk': { "name": "Ukranian" },
+    'uk': { "name": "Ukrainian" },
     'ur': { "name": "Urdu" },
     'vi': { "name": "Vietnamese" },
     'xx': { "name": "MultiLanguage"},

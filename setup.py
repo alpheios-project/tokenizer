@@ -27,7 +27,12 @@ setup(
         "marshmallow",
         "pkuseg==0.0.25",
         "spacy==2.3.2",
-        "pymorphy2"
+        "urllib3",
+        "pymorphy2-dicts-ru",
+        "pymorphy2-dicts-uk",
+        "pymorphy2",
+        "setuptools",
+        "wheel"
     ],
     tests_require=[
     ],
