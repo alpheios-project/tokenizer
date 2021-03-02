@@ -60,6 +60,14 @@ class ParserTest(TestCase):
         parsed = parser.parse_text(tei=text,ignoreElems="none")
         self.assertEqual(parsed,expected)
 
+    def test_parsetext_dtsfragment(self):
+        parser = Parser(config=None)
+        text = self.readFixture(type='tei', name='dtsfragment.xml')
+        expected = "ሰርከ፡ እንከ፡ እንዘ፡ ናአኵት፡ እስመ፡ ለነ፡ ዕረፍተ፡ ወሀበ፡ ሌሊተ፡ "
+        parsed = parser.parse_text(tei=text)
+        self.maxDiff = None
+        self.assertEqual(parsed,expected)
+
     def test_parseonlytext(self):
         parser = Parser(config=None)
         text = self.readFixture(type='tei', name='withheadertext.xml')

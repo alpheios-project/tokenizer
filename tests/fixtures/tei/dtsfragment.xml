@@ -1,0 +1,9 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <dts:fragment xmlns:dts="https://w3id.org/dts/api#">
+        <div type="edition">
+            <div type="textpart" subtype="incipit" xml:id="Incipit" xml:lang="gez">
+               <ab>ሰርከ፡ እንከ፡ እንዘ፡ ናአኵት፡ እስመ፡ ለነ፡ ዕረፍተ፡ ወሀበ፡ ሌሊተ፡</ab>
+            </div>
+         </div>
+    </dts:fragment>
+</TEI>
