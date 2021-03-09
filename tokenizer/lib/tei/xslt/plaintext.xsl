@@ -10,7 +10,15 @@
     <xsl:param name="e_ignore" select="' label ref milestone orig abbr head title teiHeader del g bibl front back foreign speaker '"/>
 
     <xsl:template match="/">
-      <xsl:apply-templates select="//tei:text|//dts:fragment"/>
+      <xsl:choose>
+          <xsl:when test="//dts:fragment">
+              <xsl:apply-templates select="//dts:fragment"/>
+          </xsl:when>
+          <xsl:otherwise>
+              <xsl:apply-templates select="//tei:text"></xsl:apply-templates>
+          </xsl:otherwise>
+      </xsl:choose>
+       
     </xsl:template>
 
     <xsl:template match="tei:w|w">

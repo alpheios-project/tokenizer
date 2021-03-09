@@ -68,6 +68,14 @@ class ParserTest(TestCase):
         self.maxDiff = None
         self.assertEqual(parsed,expected)
 
+    def test_parsetext_dtsfragmenttext(self):
+        parser = Parser(config=None)
+        text = self.readFixture(type='tei', name='dtsfragmenttext.xml')
+        expected = "Cui dono lepidum novum libellum\n\n"
+        parsed = parser.parse_text(tei=text)
+        self.maxDiff = None
+        self.assertEqual(parsed,expected)
+
     def test_parseonlytext(self):
         parser = Parser(config=None)
         text = self.readFixture(type='tei', name='withheadertext.xml')
