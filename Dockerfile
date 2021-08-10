@@ -4,7 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && apt-get install --reinstall -y apt-utils build-essential dialog netcat gcc 
-RUN pip install Cython
+RUN pip install -U pip setuptools wheel cymem numpy Cython
 
 COPY setup.py /
 RUN python /setup.py install

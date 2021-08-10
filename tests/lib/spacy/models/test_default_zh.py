@@ -17,9 +17,10 @@ class TestDefault(TestCase):
     def testChineseTokens(self):
         txt = "有子曰："
         doc = self.nlp(txt)
-        self.assertEqual(doc[0].text,"有子")
-        self.assertEqual(doc[1].text,"曰")
-        self.assertEqual(doc[2].text,"：")
-        self.assertEqual(len(doc),3)
+        self.assertEqual(doc[0].text,"有")
+        self.assertEqual(doc[1].text,"子")
+        self.assertEqual(doc[2].text,"曰")
+        self.assertEqual(doc[3].text,"：")
+        self.assertEqual(len(doc),4)
 
 

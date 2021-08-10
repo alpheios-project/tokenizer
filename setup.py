@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "apispec<4.0.0",
         "apispec-webframeworks",
-        "click",
+        "click<=7.2.0",
         "flask==1.1.2",
         "Flask-Babel",
         "Flask-Cache==0.13.1",
@@ -26,7 +26,7 @@ setup(
         "lxml<5.0.0",
         "marshmallow",
         "pkuseg==0.0.25",
-        "spacy==2.3.2",
+        "spacy==3.1",
         "urllib3",
         "pymorphy2-dicts-ru",
         "pymorphy2-dicts-uk",
