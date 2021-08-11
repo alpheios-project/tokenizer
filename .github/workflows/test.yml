@@ -19,6 +19,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        python -m pip install -U pip setuptools wheel cymem numpy
+        python -m pip install sudachipy sudachidict_core mecab-python3 unidic-lite
         python setup.py install
 
     - name: Test with unittest

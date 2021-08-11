@@ -34,11 +34,7 @@ setup(
         "pythainlp",
         "setuptools",
         "wheel",
-        "pyvi",
-        "sudachipy", 
-        "sudachidict_core",
-        "mecab-python3",
-        "unidic-lite"
+        "pyvi"
     ],
     tests_require=[
     ],
