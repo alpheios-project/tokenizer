@@ -15,7 +15,6 @@ class TestDanishDefault(TestCase):
 
     def readFixture(self, type=None, name=None):
         fixture = os.path.join('tests', 'fixtures', type, name)
-        print(fixture)
         with open(fixture, 'r', encoding="utf-8") as (stream):
             text = stream.read()
         return text

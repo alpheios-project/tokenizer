@@ -32,8 +32,6 @@ setup(
         "pymorphy2-dicts-uk",
         "pymorphy2",
         "pythainlp",
-        "setuptools",
-        "wheel",
         "pyvi"
     ],
     tests_require=[
