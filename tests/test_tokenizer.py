@@ -94,7 +94,3 @@ class TokenizerTestCase(TestCase):
         self.assertEqual(rv.status_code, 400)
         data = json.loads(rv.get_data(as_text = True))
         self.assertIn("Opening and ending tag mismatch",data['message'])
-
-
-
-

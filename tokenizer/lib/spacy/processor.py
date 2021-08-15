@@ -1,5 +1,6 @@
 import spacy
 from spacy.tokens import Token
+from spacy.language import Language
 import re
 import sys
 from marshmallow import Schema, fields
@@ -91,8 +92,8 @@ class Processor():
             :param lang: the language of the text
             :type lang: string
         """
-        sentencizer = nlp.create_pipe("sentencizer")
-        nlp.add_pipe(sentencizer)
+        # sentencizer = nlp.create_pipe("sentencizer")
+        nlp.add_pipe("sentencizer")
 
     def _new_segment(self, index=0, token=None, metadata=None):
         """ private method to create a new segment container
@@ -245,6 +246,7 @@ class Processor():
 
         match_lines = re.compile(r'^\n+$')
 
+        @Language.component("set_custom_boundaries")
         def set_custom_boundaries(doc):
             def set_meta(key=None,value=None,fromToken=None,toToken=None):
                 fromToken._.set('is_meta',True)
@@ -264,7 +266,7 @@ class Processor():
                     set_meta(key=key,value=metadata[item],fromToken=token,toToken=doc[token.i+1])
             return doc
 
-        nlp.add_pipe(set_custom_boundaries)
+        nlp.add_pipe("set_custom_boundaries")
         start_meta, text = self.metaParser.parseLine(
             line=text,
             extra=self._insert_metadata(template=segmentMetadataTemplate,index=segmentStart),
