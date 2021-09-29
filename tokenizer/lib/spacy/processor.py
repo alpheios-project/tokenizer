@@ -169,8 +169,9 @@ class Processor():
         for token in doc:
             if ( not token.is_space and not token._.is_meta ):
                 if (
-                    (segmentOn == 'singleline' and token._.line_break_before)
-                    or (segmentOn == 'doubleline' and token._.segment_break_before)
+                    (segmentOn != 'onesegment') and
+                    ((segmentOn == 'singleline' and token._.line_break_before)
+                    or (segmentOn == 'doubleline' and token._.segment_break_before))
                 ):
                     segmentIndex = segmentIndex + 1
                     segmeta, null = self.metaParser.parseLine(

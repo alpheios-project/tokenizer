@@ -14,10 +14,10 @@ setup(
         "apispec<4.0.0",
         "apispec-webframeworks",
         "click<=7.2.0",
-        "flask==1.1.2",
+        "flask==1.1.4",
         "Flask-Babel",
         "Flask-Cache==0.13.1",
-        "flask-cors==2.0.0",
+        "flask-cors==3.0.10",
         "flask-marshmallow",
         "gunicorn",
         "jieba==0.42.1",
@@ -32,7 +32,8 @@ setup(
         "pymorphy2-dicts-uk",
         "pymorphy2",
         "pythainlp",
-        "pyvi"
+        "pyvi",
+        "Jinja2==2.11.3"
     ],
     tests_require=[
     ],
