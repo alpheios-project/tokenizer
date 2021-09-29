@@ -38,7 +38,7 @@ class TokenizeTextRequestSchema(Schema):
         required=False,
         missing="doubleline",
         description=gettext("Identify how segments are separated in the text."),
-        validate=validate.OneOf(["singleline","doubleline"])
+        validate=validate.OneOf(["singleline","doubleline", "onesegment"])
     )
     lang = fields.Str(
         required=True,
