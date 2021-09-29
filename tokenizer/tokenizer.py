@@ -13,6 +13,7 @@ import sys
 import json
 
 app = Flask("tokenizer")
+
 ma = Marshmallow(app)
 babel = Babel(app)
 
