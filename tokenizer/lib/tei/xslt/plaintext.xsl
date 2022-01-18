@@ -14,8 +14,11 @@
           <xsl:when test="//dts:fragment">
               <xsl:apply-templates select="//dts:fragment"/>
           </xsl:when>
+          <xsl:when test="//tei:text">
+               <xsl:apply-templates select="//tei:text"></xsl:apply-templates>
+          </xsl:when>
           <xsl:otherwise>
-              <xsl:apply-templates select="//tei:text"></xsl:apply-templates>
+              <xsl:apply-templates select="//text"></xsl:apply-templates>
           </xsl:otherwise>
       </xsl:choose>
        
