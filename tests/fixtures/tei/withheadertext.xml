@@ -21,7 +21,6 @@
 						</sourceDesc>
 					</fileDesc>
 				</teiHeader>
-        <ab>This text should not appear</ab>
 				<text>
 					<body>
 						<div type="edition" xml:lang="lat" n="urn:cts:latinLit:phi0448.phi001.perseus-lat2">
