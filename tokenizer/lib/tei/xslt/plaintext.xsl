@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:cts="http://chs.harvard.edu/xmlns/cts"
     xmlns:dts="https://w3id.org/dts/api#"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     exclude-result-prefixes="xs" xmlns:tei="http://www.tei-c.org/ns/1.0"
@@ -14,11 +15,11 @@
           <xsl:when test="//dts:fragment">
               <xsl:apply-templates select="//dts:fragment"/>
           </xsl:when>
-          <xsl:when test="//tei:text">
-               <xsl:apply-templates select="//tei:text"></xsl:apply-templates>
+          <xsl:when test="//cts:passage">
+              <xsl:apply-templates select="//cts:passage"/>
           </xsl:when>
           <xsl:otherwise>
-              <xsl:apply-templates select="//text"></xsl:apply-templates>
+              <xsl:apply-templates/>
           </xsl:otherwise>
       </xsl:choose>
        

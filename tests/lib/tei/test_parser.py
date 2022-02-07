@@ -20,12 +20,6 @@ class ParserTest(TestCase):
     def test_cleantext(self):
         parser = Parser(config=None)
         self.maxDiff = None
-        text = self.readFixture(type='tei', name='singlesegout.txt')
-        cleaned = parser.clean_text(text)
-        self.assertEqual(cleaned,"In nova fert animus mutatas dicere formas \ncorpora; di, coeptis ( nam vos mutastis et illas) \nadspirate meis primaque ab origine mundi \nad mea perpetuum deducite tempora carmen. \n\n")
-        text = self.readFixture(type='tei', name='multisegout.txt')
-        cleaned = parser.clean_text(text)
-        self.assertEqual(cleaned,"In nova fert animus mutatas dicere formas \ncorpora; di, coeptis ( nam vos mutastis et illas) \nadspirate meis primaque ab origine mundi \nad mea perpetuum deducite tempora carmen. \n\nIn nova fert animus mutatas dicere formas \ncorpora; di, coeptis ( nam vos mutastis et illas) \nadspirate meis primaque ab origine mundi \nad mea perpetuum deducite tempora carmen. \n\n")
 
     def test_parsetext_defaults(self):
         parser = Parser(config=None)
@@ -76,7 +70,7 @@ class ParserTest(TestCase):
         self.maxDiff = None
         self.assertEqual(parsed,expected)
 
-    def test_parseonlytext(self):
+    def test_parsetext_ctsfragment(self):
         parser = Parser(config=None)
         text = self.readFixture(type='tei', name='withheadertext.xml')
         parsed = parser.parse_text(tei=text)
