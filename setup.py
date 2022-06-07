@@ -33,7 +33,8 @@ setup(
         "pymorphy2",
         "pythainlp",
         "pyvi",
-        "Jinja2==2.11.3"
+        "Jinja2==2.11.3",
+        "MarkupSafe<2.1.0"
     ],
     tests_require=[
     ],
